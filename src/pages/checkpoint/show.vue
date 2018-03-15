@@ -1,6 +1,6 @@
 <template>
-  <div v-if="checkpoint" class="checkpoint">
-    <div v-if="info_page">
+  <div v-if="checkpoint">
+    <div v-if="info_page" class="checkpoint">
       <!-- head begin -->
       <div class="main-title-box">
         <span></span>
@@ -18,11 +18,12 @@
       </div>
     </div>
 
-    <div v-if="shake_page" class="page-warp taskpage">
-      <div class="box-task-info-border">
+    <div v-if="shake_page" class="shake-page">
         <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
         <mt-button type="primary" @click="shakeDebug()">到达目标点</mt-button>
-        <img src="/dist/images/shake.gif">
+      <div class="shake-info animated wobble">
+        <span>摇一摇手机</span>
+        <img src="./images/shake.jpg">
       </div>
     </div>
 
@@ -218,28 +219,27 @@ export default {
     shakeDebug() {
       this.begin_wait();
 
+      let checkpoint = this.$store.state.checkpoint;
+
+      // 修改当前坐标
       this.$store.state.position.lat = this.checkpoint.lat;
       this.$store.state.position.lng = this.checkpoint.lng;
       this.$store.state.position.acc = this.checkpoint.range;
 
-      // this.$store.commit("set_checkpoint_status_2", this.checkpoint);
-      let checkpoint    = this.$store.state.checkpoint;
-      checkpoint.status = 2;
-
-      // 设置题目To-do
-      this.$store.commit("set_question", this.checkpoint);
-      let question      = this.$store.state.question;
-
+      // 修改关卡状态
       this.$fetch.api_game_config
         .set_record({
           code: this.$store.state.game_config.game_code,
           type: 2, // 修改关卡状态
-          checkpoint_id: checkpoint.id,
-          question_id: question.id,
+          cid: checkpoint.id,
           status: 2 // 到达位置
         })
         .then(({ data }) => {
           Indicator.close();
+
+          // 设置题目To-do
+          this.$store.commit("set_question");
+          let question = this.$store.state.question;
 
           // 保存游戏配置信息，可以不做
           this.$store.commit("set_record_list", data);
@@ -273,3 +273,19 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.shake-page {
+  background: #2d3132;
+  height: 100%;
+}
+.shake-info {
+  width: 200px;
+  height: 250px;
+  margin: 40% auto 48%;
+  font-size: 30px;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+}
+</style>
