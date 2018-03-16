@@ -77,8 +77,7 @@ export default {
   },
   mounted() {},
   created() {
-    // let id = this.$route.params.id;
-    this.checkpoint = this.$store.state.checkpoint;
+    this.checkpoint = this.$store.state.task.checkpoint;
     // 触发条件
     this.method = this.checkpoint.method;
 
@@ -107,12 +106,6 @@ export default {
     close_help() {
       this.info_page = true;
       this.help_page = false;
-    },
-
-    // 放弃任务
-    abort_task() {
-      this.$store.commit("abort_task");
-      this.$router.push("tasklist");
     },
 
     // 转换函数
@@ -219,12 +212,12 @@ export default {
     shakeDebug() {
       this.begin_wait();
 
-      let checkpoint = this.$store.state.checkpoint;
+      let checkpoint = this.checkpoint;
 
       // 修改当前坐标
-      this.$store.state.position.lat = this.checkpoint.lat;
-      this.$store.state.position.lng = this.checkpoint.lng;
-      this.$store.state.position.acc = this.checkpoint.range;
+      this.$store.state.position.lat = checkpoint.lat;
+      this.$store.state.position.lng = checkpoint.lng;
+      this.$store.state.position.acc = checkpoint.range;
 
       // 修改关卡状态
       this.$fetch.api_game_config
@@ -237,9 +230,11 @@ export default {
         .then(({ data }) => {
           Indicator.close();
           // 保存游戏配置信息
-          this.$store.commit("set_record_list", data);
+          // this.$store.commit("set_record_list", data);
           // 设置题目
-          let question    = this.$store.state.game_config.question_list[checkpoint.question];
+          let question = this.$store.state.game_config.question_list[
+            checkpoint.question
+          ];
           this.$store.commit("set_question", question);
           // 进入回答问题
           this.$router.push({ name: "question_show" });

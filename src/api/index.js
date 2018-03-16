@@ -38,5 +38,6 @@ const install = function (Vue) {
 }
 
 export default {
-  install
+  install,
+  fetch: apiObj
 }

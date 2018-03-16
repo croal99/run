@@ -35,46 +35,30 @@ export default {
     };
   },
   created() {
-    // 复位当前关卡
-    this.$store.commit("set_checkpoint", null);
+    // 初始化当前任务
+    console.log("list created");
+    this.begin_wait();
+    this.$store.commit("init_task");
 
     // 修改关卡状态
-    let checkpoint_list = this.$store.state.game_config.checkpoint_list;
-    let record_list = this.$store.state.record_list;
+    let game_code = this.$store.state.game_config.game_code;
 
     // 根据记录修改关卡状态
-    for (let key in record_list.list) {
-      let record = record_list.list[key];
-      let checkpoint = checkpoint_list[record.cid];
-      if (checkpoint) {
-        checkpoint.status = record.status;
-      }
-    }
-
-    // 根据状态，跳转关卡显示图片
-    for (let key in checkpoint_list) {
-      let checkpoint = checkpoint_list[key];
-      switch (checkpoint.status) {
-        case 0:
-          checkpoint.image = checkpoint.image0;
-          break;
-        case 1:
-          checkpoint.image = checkpoint.image1;
-          break;
-        case 2:
-          checkpoint.image = checkpoint.image2;
-          break;
-        case 3:
-          checkpoint.image = checkpoint.image3;
-          break;
-        case 4:
-          checkpoint.image = checkpoint.image4;
-          break;
-      }
-    }
-
-    // 保存已经调整后的关卡列表信息，用于显示
-    this.checkpoint_list = checkpoint_list;
+    this.$fetch.api_game_config
+      .get_record({
+        code: game_code
+      })
+      .then(({ data }) => {
+        // console.log("get_record_list", data);
+        this.$store.commit("set_record_list", data);
+        // 保存已经调整后的关卡列表信息，用于显示
+        this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
+        // 关闭等待
+        Indicator.close();
+      });
+  },
+  mounted() {
+    // console.log("list mounted");
   },
   methods: {
     begin_wait() {
@@ -101,7 +85,7 @@ export default {
           .then(({ data }) => {
             Indicator.close();
             // 保存游戏记录信息
-            this.$store.commit("set_record_list", data);
+            // this.$store.commit("set_record_list", data);
             // 显示任务
             this.$router.push({ name: "task_show" });
           });
@@ -109,25 +93,17 @@ export default {
         // 显示任务
         this.$router.push({ name: "task_show" });
       } else if (checkpoint.status == 2) {
-        // 重新提交一次，防止预置关卡没有到达记录
-        this.begin_wait();
-        this.$fetch.api_game_config
-          .set_record({
-            code: this.$store.state.game_config.game_code,
-            type: 2, // 修改关卡状态
-            cid: checkpoint.id,
-            status: 2 // 
-          })
-          .then(({ data }) => {
-            Indicator.close();
-            // 保存游戏配置信息
-            this.$store.commit("set_record_list", data);
-            // 显示题目
-            let question = this.$store.state.game_config.question_list[checkpoint.question];
-            this.$store.commit("set_question", question);
-            // 进入回答问题
-            this.$router.push({ name: "question_show" });
-          });
+        // 关卡关联的默认题目
+        let question = this.$store.state.game_config.question_list[checkpoint.question];
+        
+        // 检查该关卡是否有记录，如果有，按照记录执行
+        let record = this.$store.state.record_list.list[checkpoint.id];
+        if (record) {
+          question  = this.$store.state.game_config.question_list[record.qid];
+        }
+        this.$store.commit("set_question", question);
+        // 进入回答问题
+        this.$router.push({ name: "question_show" });
       } else {
         // 3/4都是已经完成的状态，因此不需要跳转页面
       }

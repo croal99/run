@@ -22,7 +22,7 @@ export default {
       set_user_info: SET_USER_INFO
     }),
     initGame(game_code) {
-      console.log("initGame", this);
+      // console.log("initGame", this);
       // 从服务器获取用户信息
       this.$fetch.api_user
         .get_user_info({
@@ -52,17 +52,14 @@ export default {
               // 保存游戏配置信息
               // console.log(data);
               this.$store.commit("set_game_config", data);
-
               // get_from_local
               this.$store.commit("get_from_local");
-
-              // 读取用户记录
+              // get_record_list
               this.$fetch.api_game_config
                 .get_record({
                   code: game_code
                 })
                 .then(({ data }) => {
-                  // 保存游戏配置信息
                   this.$store.commit("set_record_list", data);
                 });
             });
@@ -76,7 +73,7 @@ export default {
           path: path
         })
         .then(({ data }) => {
-          let sign_package    = data;
+          let sign_package = data;
           // console.log("sign_package", sign_package, wx);
 
           // config
@@ -106,7 +103,7 @@ export default {
               ],
               success: function(res) {
                 // this.$store.state.weixin_status = true;
-                console.log('init weixin success');
+                console.log("init weixin success");
                 // alert("授权成功");
               }
             });

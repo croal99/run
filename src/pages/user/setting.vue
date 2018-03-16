@@ -78,8 +78,9 @@ export default {
             })
             .then(({ data }) => {
               // 保存游戏配置信息
-              this.$store.commit("set_record_list", data);
+              // this.$store.commit("set_record_list", data);
               console.log("renew end");
+              this.$store.commit("set_record_list", data);
             });
         });
     }

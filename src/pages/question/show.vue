@@ -11,11 +11,11 @@
       <!-- <mt-button type="primary" @click="saveImage('ksyBhWQfJCjcuGMgThgPo7VBXl1-yWegcwZNlwGkY08Qx8lPogNeKZ4QyyE15Rau')">test</mt-button> -->
       <!-- <div v-html="question.content"></div> -->
       <!-- <img v-if="shake_qrcode_url" :src="shake_qrcode_url" style="width:100%"> -->
-      <div>
+      <div @click="next_page">
         <div v-html="html"></div>
-        <div v-if="!answer_btn" class="btn-question-box">
-          <span class="btn-question" @click="next_page">下一页</span>
-        </div>
+        <!-- <div v-if="!answer_btn" class="btn-question-box">
+          <span class="btn-question">下一页</span>
+        </div> -->
       </div>
 
       <div v-if="answer_page" class="answer">
@@ -58,7 +58,7 @@ export default {
       error_count: 0,
       btn_text: "确定",
       page_index: false,
-      html: '',
+      html: "",
 
       info_page: true,
       answer_page: false,
@@ -82,26 +82,28 @@ export default {
     },
 
     next_page() {
-      console.log('next_page', this.page_index);
-      this.html   = this.question.page_list[this.page_index++];
-      this.answer_btn     = this.page_index == this.question.page_list.length;
+      if (this.page_index < this.question.page_list.length) {
+        console.log("next_page", this.page_index);
+        this.html = this.question.page_list[this.page_index++];
+        this.answer_btn = this.page_index == this.question.page_list.length;
+      }
     },
 
     show_question() {
-      let question = this.$store.state.question;
+      let question = this.$store.state.task.question;
       console.log("show question", question);
-      if (question==null) {
+      if (question == null) {
         // 没有题目，返回列表
         this.$router.push({ name: "task_list" });
         return;
       }
 
       // 对content按<page>分页
-      question.page_list    = question.content.split('<page>');
-      console.log('pages', question.page_list, question.page_list.length);
-      this.page_index     = 0;
-      this.html           = question.page_list[this.page_index++];
-      this.answer_btn     = this.page_index == question.page_list.length;
+      question.page_list = question.content.split("<page>");
+      // console.log("pages", question.page_list, question.page_list.length);
+      this.page_index = 0;
+      this.html = question.page_list[this.page_index++];
+      this.answer_btn = this.page_index == question.page_list.length;
 
       switch (parseInt(question.type)) {
         case 3:
@@ -149,6 +151,7 @@ export default {
         this.answer.toString()
       );
     },
+
     answer_question() {
       switch (parseInt(this.question.type)) {
         case 3:
@@ -162,8 +165,17 @@ export default {
     //
     set_answer() {
       console.log("answer", this.answer);
-      this.begin_wait();
       this.$store.commit("answer_question", this.answer);
+
+      // 设置下一题
+      console.log("answer end");
+      let question = this.$store.state.task.question;
+      this.$store.commit("set_next_question", question);
+      this.show_question();
+
+      return;
+
+      this.begin_wait();
 
       // 保存答案
       this.$fetch.api_game_config
@@ -176,12 +188,7 @@ export default {
           Indicator.close();
 
           // 保存游戏配置信息
-          this.$store.commit("set_record_list", data);
-
-          // 设置下一题
-          console.log("answer end");
-          this.$store.commit("set_next_question");
-          this.show_question();
+          // this.$store.commit("set_record_list", data);
         });
     },
 

@@ -18,7 +18,7 @@ export default {
     };
   },
   mounted() {
-    console.log("login", this);
+    console.log("login");
     this.begin_wait();
     // this.beginWait();
 
@@ -34,8 +34,8 @@ export default {
     },
 
     begin_game() {
-      // this.begin_wait();
-      this.beginWait();
+      this.begin_wait();
+      // this.beginWait();
 
       let game_code = this.$store.state.game_config.game_code;
       this.$fetch.api_game_config
@@ -48,7 +48,7 @@ export default {
           Indicator.close();
 
           // 保存游戏配置信息
-          this.$store.commit("set_record_list", data);
+          // this.$store.commit("set_record_list", data);
 
           this.$router.push({ name: "task_list" });
         });
