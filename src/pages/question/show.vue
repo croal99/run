@@ -8,52 +8,34 @@
     <!-- head end -->
 
     <div v-if="info_page" class="question-info">
-      <mt-button type="primary" @click="saveImage('ksyBhWQfJCjcuGMgThgPo7VBXl1-yWegcwZNlwGkY08Qx8lPogNeKZ4QyyE15Rau')">test</mt-button>
-          <!-- <input class="answer-input" type="text" v-model="serverID"> -->
-      <div v-html="question.content"></div>
+      <!-- <mt-button type="primary" @click="saveImage('ksyBhWQfJCjcuGMgThgPo7VBXl1-yWegcwZNlwGkY08Qx8lPogNeKZ4QyyE15Rau')">test</mt-button> -->
+      <!-- <div v-html="question.content"></div> -->
       <!-- <img v-if="shake_qrcode_url" :src="shake_qrcode_url" style="width:100%"> -->
-    <div class="btn-question-box">
-      <span class="btn-question" @click="answer_question">{{btn_text}}</span>    
-    </div>
+      <div>
+        <div v-html="html"></div>
+        <div v-if="!answer_btn" class="btn-question-box">
+          <span class="btn-question" @click="next_page">下一页</span>
+        </div>
+      </div>
+
+      <div v-if="answer_page" class="answer">
+        <br/>
+        <br/>
+        <input class="answer-input" type="text" v-model="answer">
+      </div>
+
+      <div v-if="answer_btn" class="btn-question-box">
+        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
+      </div>
     </div>
 
     <div v-if="preview_page" class="question-preview">
-        <img v-if="answer" class="question-img" :src="answer">
-        <mt-button type="primary" @click="set_answer">确定</mt-button>
-        <mt-button type="primary" @click="close_preview">取消</mt-button>
+      <img v-if="answer" class="question-img" :src="answer">
+      <mt-button type="primary" @click="set_answer">确定</mt-button>
+      <mt-button type="primary" @click="close_preview">取消</mt-button>
     </div>
 
-    <!-- <div class="box-task animated fadeInLeft delay-time03">
-      <div class="box-task-info-border">
-      </div>
 
-
-      <div class="box-task-btn">
-        <div class="btn-border" v-if="question.type==3">
-          <span class="btn btn-block btn-lg btn-green" @click="chooseImage">选择照片</span>
-          <span class="btn btn-block btn-lg btn-green" @click="set_answer('https://images.51fengxun.cn/20171229/f55c19c8ee91d56179916bd48fb46e97.jpg')">模拟上传</span>
-          <img v-if="answer" class="question-img" :src="answer">
-        </div>
-        <div v-else-if="question.type==6">
-          <mt-checklist v-model="answer" :options="question.items"></mt-checklist>
-        </div>
-        <div v-else-if="question.type==7">
-          <mt-progress :value="task.multi_shake_count" :bar-height="20">
-            <div slot="start">0%</div>
-            <div slot="end">100%</div>
-          </mt-progress>
-          <div class="btn-border" v-if="task.multi_shake_count>question.answer">
-            <span class="btn btn-block btn-lg btn-green" @click="set_answer(question.answer)">成功</span>
-          </div>
-        </div>
-        <div v-else-if="question.type==11">
-          <input class="answer-input" type="text" placeholder="请输入答案" v-model="answer">
-        </div>
-        <div class="btn-border" v-if="answer">
-          <span class="btn btn-block btn-lg btn-green" @click="answer_question">确定</span>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -75,49 +57,90 @@ export default {
       shake_qrcode_url: "",
       error_count: 0,
       btn_text: "确定",
+      page_index: false,
+      html: '',
+
       info_page: true,
-      preview_page: false,
+      answer_page: false,
+      answer_btn: false,
+      preview_page: false
     };
   },
   mounted() {},
   created() {
-    let question = this.$store.state.question;
-    // console.log("question", question);
-    switch (parseInt(question.type)) {
-      case 3:
-        // 上传照片
-        this.btn_text = "上传照片";
-        break;
-      case 5:
-        // get next question
-      case 6:
-        // 多选&单选
-        this.answer = [];
-        break;
-      case 7:
-        // 多人摇一摇
-        let code =
-          "https://game.591cms.com/game/shake?id=" +
-          this.$store.state.userinfo.openid +
-          "&game=" +
-          this.$store.state.game_config.game_code +
-          "&cid=" +
-          this.$store.state.checkpoint.id;
-        console.log("code", code);
-        this.shake_qrcode_url =
-          "https://game.591cms.com/api3/shake_qrcode?code=" + code;
-        console.log("shake_qrcode_url", this.shake_qrcode_url);
-        this.answer = 0;
-        break;
-      default:
-        this.answer = "";
-    }
-    this.question = question;
-
-    // 如果是上传照片，需要初始化微信接口
+    // 初始化微信接口
     wx.app = this;
+
+    this.show_question();
   },
   methods: {
+    begin_wait() {
+      Indicator.open({
+        text: "数据载入中...",
+        spinnerType: "fading-circle"
+      });
+    },
+
+    next_page() {
+      console.log('next_page', this.page_index);
+      this.html   = this.question.page_list[this.page_index++];
+      this.answer_btn     = this.page_index == this.question.page_list.length;
+    },
+
+    show_question() {
+      let question = this.$store.state.question;
+      console.log("show question", question);
+      if (question==null) {
+        // 没有题目，返回列表
+        this.$router.push({ name: "task_list" });
+        return;
+      }
+
+      // 对content按<page>分页
+      question.page_list    = question.content.split('<page>');
+      console.log('pages', question.page_list, question.page_list.length);
+      this.page_index     = 0;
+      this.html           = question.page_list[this.page_index++];
+      this.answer_btn     = this.page_index == question.page_list.length;
+
+      switch (parseInt(question.type)) {
+        case 3:
+          // 上传照片
+          this.btn_text = "上传照片";
+          break;
+        case 5:
+        // get next question
+        case 6:
+          // 多选&单选
+          this.answer = [];
+          break;
+        case 7:
+          // 多人摇一摇
+          let code =
+            "https://game.591cms.com/game/shake?id=" +
+            this.$store.state.userinfo.openid +
+            "&game=" +
+            this.$store.state.game_config.game_code +
+            "&cid=" +
+            this.$store.state.checkpoint.id;
+          console.log("code", code);
+          this.shake_qrcode_url =
+            "https://game.591cms.com/api3/shake_qrcode?code=" + code;
+          console.log("shake_qrcode_url", this.shake_qrcode_url);
+          this.answer = 0;
+          break;
+        case 9:
+          // 任务书
+          this.btn_text = "确定";
+          break;
+        default:
+          this.btn_text = "提交";
+          this.answer = "";
+          this.answer_page = true;
+      }
+      this.question = question;
+    },
+
     test1() {
       console.log(
         "answer",
@@ -131,12 +154,15 @@ export default {
         case 3:
           this.chooseImage();
           break;
+        default:
+          this.set_answer();
       }
     },
 
     //
     set_answer() {
       console.log("answer", this.answer);
+      this.begin_wait();
       this.$store.commit("answer_question", this.answer);
 
       // 保存答案
@@ -144,16 +170,18 @@ export default {
         .set_record({
           code: this.$store.state.game_config.game_code,
           type: 3, // 记录答题状态
-          record: this.$store.state.record,
+          record: this.$store.state.record
         })
         .then(({ data }) => {
-          // Indicator.close();
+          Indicator.close();
 
-          // 保存游戏配置信息，可以不做
+          // 保存游戏配置信息
           this.$store.commit("set_record_list", data);
 
-          // 进入回答问题
-          // this.$router.push({ name: "question_show" });
+          // 设置下一题
+          console.log("answer end");
+          this.$store.commit("set_next_question");
+          this.show_question();
         });
     },
 
@@ -213,16 +241,16 @@ export default {
           Indicator.close();
           // console.log(data);
           this.answer = data.thumb_url;
-          this.info_page    = false;
+          this.info_page = false;
           this.preview_page = true;
         });
     },
 
     // 关闭预览
     close_preview() {
-      this.info_page    = true;
+      this.info_page = true;
       this.preview_page = false;
-    },
+    }
   }
 };
 </script>
