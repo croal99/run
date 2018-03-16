@@ -236,14 +236,11 @@ export default {
         })
         .then(({ data }) => {
           Indicator.close();
-
-          // 设置题目To-do
-          this.$store.commit("set_question");
-          let question = this.$store.state.question;
-
-          // 保存游戏配置信息，可以不做
+          // 保存游戏配置信息
           this.$store.commit("set_record_list", data);
-
+          // 设置题目
+          let question    = this.$store.state.game_config.question_list[checkpoint.question];
+          this.$store.commit("set_question", question);
           // 进入回答问题
           this.$router.push({ name: "question_show" });
         });

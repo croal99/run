@@ -88,31 +88,48 @@ export default {
     set_task(checkpoint) {
       this.$store.commit("set_checkpoint", checkpoint);
 
-      if (checkpoint.status == 1) {
-        // 显示任务
-        this.$router.push({ name: "task_show" });
-      } else if (checkpoint.status == 2) {
-        // 显示题目
-        this.$store.commit("set_question", checkpoint);
-        this.$router.push({ name: "question_show" });
-      } else {
+      if (checkpoint.status == 0) {
+        // 更新状态
         this.begin_wait();
         this.$fetch.api_game_config
           .set_record({
             code: this.$store.state.game_config.game_code,
             type: 2, // 修改关卡状态
-            checkpoint_id: checkpoint.id,
+            cid: checkpoint.id,
             status: 1 // 选中目标
           })
           .then(({ data }) => {
             Indicator.close();
-
-            // 保存游戏配置信息
+            // 保存游戏记录信息
             this.$store.commit("set_record_list", data);
-
             // 显示任务
             this.$router.push({ name: "task_show" });
           });
+      } else if (checkpoint.status == 1) {
+        // 显示任务
+        this.$router.push({ name: "task_show" });
+      } else if (checkpoint.status == 2) {
+        // 重新提交一次，防止预置关卡没有到达记录
+        this.begin_wait();
+        this.$fetch.api_game_config
+          .set_record({
+            code: this.$store.state.game_config.game_code,
+            type: 2, // 修改关卡状态
+            cid: checkpoint.id,
+            status: 2 // 
+          })
+          .then(({ data }) => {
+            Indicator.close();
+            // 保存游戏配置信息
+            this.$store.commit("set_record_list", data);
+            // 显示题目
+            let question = this.$store.state.game_config.question_list[checkpoint.question];
+            this.$store.commit("set_question", question);
+            // 进入回答问题
+            this.$router.push({ name: "question_show" });
+          });
+      } else {
+        // 3/4都是已经完成的状态，因此不需要跳转页面
       }
     }
   }
