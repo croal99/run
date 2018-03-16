@@ -13,9 +13,6 @@
       <!-- <img v-if="shake_qrcode_url" :src="shake_qrcode_url" style="width:100%"> -->
       <div @click="next_page">
         <div v-html="html"></div>
-        <!-- <div v-if="!answer_btn" class="btn-question-box">
-          <span class="btn-question">下一页</span>
-        </div> -->
       </div>
 
       <div v-if="answer_page" class="answer">
@@ -81,6 +78,7 @@ export default {
       });
     },
 
+    // 显示下一页内容
     next_page() {
       if (this.page_index < this.question.page_list.length) {
         console.log("next_page", this.page_index);
@@ -89,9 +87,11 @@ export default {
       }
     },
 
+    // 显示
+
     show_question() {
       let question = this.$store.state.task.question;
-      console.log("show question", question);
+      // console.log("show question", question);
       if (question == null) {
         // 没有题目，返回列表
         this.$router.push({ name: "task_list" });
@@ -100,7 +100,6 @@ export default {
 
       // 对content按<page>分页
       question.page_list = question.content.split("<page>");
-      // console.log("pages", question.page_list, question.page_list.length);
       this.page_index = 0;
       this.html = question.page_list[this.page_index++];
       this.answer_btn = this.page_index == question.page_list.length;

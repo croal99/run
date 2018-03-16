@@ -27,15 +27,15 @@ const state = {
   // checkpoint: null,         // 当前关卡
   // question: null,           // 当前题目
   // question_list: null,      // 待选题库
-  record_list: { // 游戏完成情况（需要随时保存）
-    status: 0, // 1--welcome 2--running 3--ending
-    mark: 0, // 成绩
-    time: 0, // 耗时
-    begin_time: 0, // 开始时间
-    end_time: 0, // 结束时间
-    list: [], // 完成记录(cid,qid,status)
-    tools: [], // 获得的道具
-  },
+  // record_list: { // 游戏完成情况（需要随时保存）
+  //   status: 0, // 1--welcome 2--running 3--ending
+  //   mark: 0, // 成绩
+  //   time: 0, // 耗时
+  //   begin_time: 0, // 开始时间
+  //   end_time: 0, // 结束时间
+  //   list: [], // 完成记录(cid,qid,status)
+  //   tools: [], // 获得的道具
+  // },
   //   record_checkpoint: {      // 记录中的list，无实际数据
   //       cid: 0,                 // checkpoint id
   //       status: 0,              // 0--未开启 1--选中目标 2--到达位置 3--完成（成功） 4--完成（失败）

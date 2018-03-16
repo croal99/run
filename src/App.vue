@@ -67,7 +67,7 @@ export default {
     },
     initWeiChat() {
       let path = window.location.href.split("#")[0];
-      console.log("initWeiChat", path);
+      // console.log("initWeiChat", path);
       this.$fetch.api_user
         .get_package({
           path: path

@@ -56,7 +56,7 @@ export default {
 
     //
     check_load_status() {
-      console.log("checkLoading", this.$store.state.record_list.status);
+      // console.log("checkLoading", this.$store.state.record_list.status);
       if (this.$store.state.record_list.status > 0) {
         Indicator.close();
         if (this.$store.state.record_list.status == 1) {

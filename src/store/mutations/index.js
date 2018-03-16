@@ -153,7 +153,8 @@ export default {
             break;
           case '*': // 获得道具
             question = state.game_config.question_list[id];
-            state.record_list.tools.push[question];
+            state.record_list.tools.push(question);
+            console.log('tools', question, state.record_list)
             break;
         }
       }

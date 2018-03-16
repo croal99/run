@@ -36,7 +36,7 @@ export default {
   },
   created() {
     // 初始化当前任务
-    console.log("list created");
+    // console.log("list created");
     this.begin_wait();
     this.$store.commit("init_task");
 

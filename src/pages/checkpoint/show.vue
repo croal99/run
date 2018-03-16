@@ -9,18 +9,22 @@
       <span class="help-box" @click="show_help"></span>
       <!-- head end -->
 
-      <div class="task-info" v-html="checkpoint.content">
+      <div @click="next_page">
+        <div class="task-info" v-html="html"></div>
       </div>
+
+      <!-- <div v-html="checkpoint.content">
+      </div> -->
       <!-- foot -->
-      <div class="btn-checkpoint-box">
+      <div v-if="answer_btn" class="btn-checkpoint-box">
         <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
         <span v-else class="btn-checkpoint" @click="shakeBegin()">摇一摇</span>
       </div>
     </div>
 
     <div v-if="shake_page" class="shake-page">
-        <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
-        <mt-button type="primary" @click="shakeDebug()">到达目标点</mt-button>
+      <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
+      <mt-button type="primary" @click="shakeDebug()">到达目标点</mt-button>
       <div class="shake-info animated wobble">
         <span>摇一摇手机</span>
         <img src="./images/shake.jpg">
@@ -54,6 +58,7 @@
   </div>
 </template>
 
+
 <script type="text/javascript">
 import { Indicator } from "mint-ui";
 
@@ -70,6 +75,11 @@ export default {
       last_x: 0,
       last_y: 0,
       last_z: 0,
+
+      page_index: 0,
+      html: "",
+      answer_btn: false,
+
       info_page: true,
       shake_page: false,
       help_page: false
@@ -77,9 +87,15 @@ export default {
   },
   mounted() {},
   created() {
-    this.checkpoint = this.$store.state.task.checkpoint;
+    let checkpoint = this.$store.state.task.checkpoint;
     // 触发条件
-    this.method = this.checkpoint.method;
+    this.method = checkpoint.method;
+
+    // 对content按<page>分页
+    checkpoint.page_list = checkpoint.content.split("<page>");
+    this.page_index = 0;
+    this.html = checkpoint.page_list[this.page_index++];
+    this.answer_btn = this.page_index == checkpoint.page_list.length;
 
     // 注册手机摇一摇事件
     if (window.DeviceMotionEvent) {
@@ -87,6 +103,8 @@ export default {
     } else {
       alert("您的设备不支持摇一摇");
     }
+
+    this.checkpoint   = checkpoint;
   },
   methods: {
     begin_wait() {
@@ -94,6 +112,14 @@ export default {
         text: "数据载入中...",
         spinnerType: "fading-circle"
       });
+    },
+
+    next_page() {
+      if (this.page_index < this.checkpoint.page_list.length) {
+        console.log("next_page", this.page_index);
+        this.html = this.checkpoint.page_list[this.page_index++];
+        this.answer_btn = this.page_index == this.checkpoint.page_list.length;
+      }
     },
 
     // 显示帮助
