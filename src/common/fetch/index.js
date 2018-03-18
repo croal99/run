@@ -42,15 +42,17 @@ export default function fetch(options) {
     instance(options)
       .then(({data: {code, msg, data}}) => {
         //请求成功时,根据业务判断状态
-        if (code === port_code.success) {
-          resolve({code, msg, data})
-          return false
-        } else if (code === port_code.unlogin) {
-          setUserInfo(null)
-          router.replace({name: "login"})
-        }
-        Message.warning(msg)
-        reject({code, msg, data})
+        resolve({code, msg, data})
+        return false
+        // if (code === port_code.success) {
+        //   resolve({code, msg, data})
+        //   return false
+        // } else if (code === port_code.unlogin) {
+        //   setUserInfo(null)
+        //   router.replace({name: "login"})
+        // }
+        // Message.warning(msg)
+        // reject({code, msg, data})
       })
       .catch((error) => {
         //请求失败时,根据业务判断状态

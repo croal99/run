@@ -41,6 +41,21 @@ export default {
     state.game_config = game_config
   },
 
+  // 设置游戏基础信息
+  set_game_remote(state) {
+    api.fetch.api_game_config
+      .set_record({
+        code: state.game_config.game_code,
+        type: 1, // 修改关卡状态
+        status: state.record_list.status
+      })
+      .then(({
+        data
+      }) => {
+        console.log('set_game_remote', data);
+      });
+  },
+
   // 获取本地缓存记录
   get_from_local(state) {},
 
@@ -51,13 +66,17 @@ export default {
     // 初始化记录
     for (let key in record_list.list) {
       let record = record_list.list[key];
+      // console.log('record', record); //这里被调用了两次
       let checkpoint = checkpoint_list[record.cid];
       if (checkpoint) {
-        checkpoint.status = record.status;
-        checkpoint.show = record.show;
+        if (record.hasOwnProperty('status')) {
+          checkpoint.status = record.status;
+        }
+        if (record.hasOwnProperty('show')) {
+          checkpoint.show = record.show;
+        }
       }
     }
-    state.record_list = record_list;
 
     // 根据状态，修改关卡显示图片
     for (let key in checkpoint_list) {
@@ -80,6 +99,8 @@ export default {
           break;
       }
     }
+
+    state.record_list = record_list;
   },
 
   // 游戏开始，设置时间
@@ -151,10 +172,19 @@ export default {
             checkpoint.show = false;
             this.commit('set_checkpoint_remote', checkpoint)
             break;
+          case 's': // 修改关卡状态
+            checkpoint = state.task.checkpoint;
+            checkpoint.status = id;
+            this.commit('set_checkpoint_remote', checkpoint)
+            break;
           case '*': // 获得道具
             question = state.game_config.question_list[id];
             state.record_list.tools.push(question);
-            console.log('tools', question, state.record_list)
+            // console.log('tools', question, state.record_list)
+            break;
+          case 'e': // 结束游戏
+            state.record_list.status = 3;
+            this.commit('set_game_remote')
             break;
         }
       }

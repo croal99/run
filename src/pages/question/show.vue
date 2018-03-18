@@ -10,15 +10,18 @@
     <div v-if="info_page" class="question-info">
       <!-- <mt-button type="primary" @click="saveImage('ksyBhWQfJCjcuGMgThgPo7VBXl1-yWegcwZNlwGkY08Qx8lPogNeKZ4QyyE15Rau')">test</mt-button> -->
       <!-- <div v-html="question.content"></div> -->
-      <!-- <img v-if="shake_qrcode_url" :src="shake_qrcode_url" style="width:100%"> -->
       <div @click="next_page">
         <div v-html="html"></div>
       </div>
 
       <div v-if="answer_page" class="answer">
-        <br/>
-        <br/>
         <input class="answer-input" type="text" v-model="answer">
+      </div>
+      <div v-if="selete_page">
+        <mt-checklist v-model="answer" :options="select_options" class="answer-check"></mt-checklist>
+      </div>
+      <div v-if="shake_page">
+        <img v-if="shake_qrcode_url" :src="shake_qrcode_url" class="answer-shake">
       </div>
 
       <div v-if="answer_btn" class="btn-question-box">
@@ -26,12 +29,13 @@
       </div>
     </div>
 
-    <div v-if="preview_page" class="question-preview">
-      <img v-if="answer" class="question-img" :src="answer">
-      <mt-button type="primary" @click="set_answer">确定</mt-button>
-      <mt-button type="primary" @click="close_preview">取消</mt-button>
+    <div v-if="preview_page" class="info-content-box">
+      <img v-if="answer" class="img-responsive img-upload" :src="answer">
+      <div class="btn-main-box">
+        <button class="btn-upload" @click="set_answer">确认上传</button>
+        <button class="btn-cancel" @click="close_preview">取消重拍</button>
+      </div>
     </div>
-
 
   </div>
 </template>
@@ -43,24 +47,26 @@ import { Indicator } from "mint-ui";
 export default {
   data() {
     return {
-      task: this.$store.state.task,
       question: null,
-      question_list: this.$store.state.question_list,
-      image: "",
-      photoID: "",
-      serverID: "",
+
       answer: "",
       weixin_status: true,
       shake_qrcode_url: "",
       error_count: 0,
-      btn_text: "确定",
-      page_index: false,
-      html: "",
 
-      info_page: true,
-      answer_page: false,
-      answer_btn: false,
-      preview_page: false
+      page_index: false,          // 分页显示索引
+      html: "",                   // 当前显示页面内容
+
+      select_options:[],          // 多选题选项
+
+      info_page: true,            // 题目内容页面
+      answer_page: false,         // 填空题页面
+      selete_page: false,         // 多选题页面
+      shake_page: false,          // 多人摇一摇页面
+      preview_page: false,        // 照片预览页面
+
+      btn_text: "确定",           // 按钮名称
+      answer_btn: false,          // 提交按钮页面
     };
   },
   mounted() {},
@@ -88,10 +94,19 @@ export default {
     },
 
     // 显示
-
     show_question() {
+      let checkpoint = this.$store.state.task.checkpoint;
       let question = this.$store.state.task.question;
-      // console.log("show question", question);
+      console.log("show question", question);
+
+      // 初始化页面显示
+      this.info_page = true;
+      this.answer_page = false;
+      this.selete_page = false;
+      this.shake_page = false;
+      this.preview_page = false;
+      this.answer_btn = false;
+
       if (question == null) {
         // 没有题目，返回列表
         this.$router.push({ name: "task_list" });
@@ -114,21 +129,38 @@ export default {
         case 6:
           // 多选&单选
           this.answer = [];
+          let item_list = question.items.split('<br>');
+          let index = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          for(let key in item_list) {
+            let item = item_list[key];
+            if (item.length>0) {
+              let options = {
+                label: item,
+                value: index[key]
+              }
+              this.select_options.push(options);
+            }
+          }
+          // 显示页面
+          this.selete_page = true;
           break;
         case 7:
           // 多人摇一摇
           let code =
             "https://game.591cms.com/game/shake?id=" +
-            this.$store.state.userinfo.openid +
+            this.$store.state.user_info.openid +
             "&game=" +
             this.$store.state.game_config.game_code +
             "&cid=" +
-            this.$store.state.checkpoint.id;
+            this.$store.state.task.checkpoint.id;
           console.log("code", code);
           this.shake_qrcode_url =
             "https://game.591cms.com/api3/shake_qrcode?code=" + code;
           console.log("shake_qrcode_url", this.shake_qrcode_url);
           this.answer = 0;
+
+          // 显示页面
+          this.shake_page = true;
           break;
         case 9:
           // 任务书
@@ -140,15 +172,6 @@ export default {
           this.answer_page = true;
       }
       this.question = question;
-    },
-
-    test1() {
-      console.log(
-        "answer",
-        this.answer,
-        this.answer.sort(),
-        this.answer.toString()
-      );
     },
 
     answer_question() {
@@ -163,24 +186,30 @@ export default {
 
     //
     set_answer() {
-      console.log("answer", this.answer);
+      let answer = this.answer;
+      if (parseInt(this.question.type) == 6) {
+        // 单选&多选题
+        //   需要对选项重新排序，否则不方便判断答案
+        answer = this.answer.sort().toString();
+      }
+      
+      console.log("answer", answer);
       this.$store.commit("answer_question", this.answer);
 
       // 设置下一题
-      console.log("answer end");
       let question = this.$store.state.task.question;
       this.$store.commit("set_next_question", question);
       this.show_question();
 
       return;
-
       this.begin_wait();
 
       // 保存答案
       this.$fetch.api_game_config
         .set_record({
           code: this.$store.state.game_config.game_code,
-          type: 3, // 记录答题状态
+          cid: this.$store.state.task.checkpoint.id,
+          type: 4, // 记录答题状态
           record: this.$store.state.record
         })
         .then(({ data }) => {
@@ -189,20 +218,6 @@ export default {
           // 保存游戏配置信息
           // this.$store.commit("set_record_list", data);
         });
-    },
-
-    // 回答问题
-    answer_question_1() {
-      let answer = this.answer;
-      if (parseInt(this.question.type) == 6) {
-        // 单选&多选题
-        //   需要对选项重新排序，否则不方便判断答案
-        answer = this.answer.sort().toString();
-      }
-
-      console.log("answer", answer);
-      this.$store.commit("answer_question", this.answer);
-      this.$router.push("complete");
     },
 
     // 选择照片
@@ -220,7 +235,6 @@ export default {
 
     // 上传照片到微信
     uploadImage(photoID) {
-      // this.photoID = photoID;
       wx.uploadImage({
         localId: photoID,
         isShowProgressTips: 1,
@@ -238,7 +252,7 @@ export default {
         spinnerType: "fading-circle"
       });
 
-      this.serverID = serverID;
+      // this.serverID = serverID;
       this.$fetch.api_game_config
         .download_media({
           id: serverID

@@ -49,13 +49,20 @@ export default {
         code: game_code
       })
       .then(({ data }) => {
-        // console.log("get_record_list", data);
-        this.$store.commit("set_record_list", data);
-        // 保存已经调整后的关卡列表信息，用于显示
-        this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
         // 关闭等待
         Indicator.close();
+        // console.log("get_record_list", data);
+        this.$store.commit("set_record_list", data);
+        if (this.$store.state.record_list.status == 3) {
+          // 游戏结束
+          this.$router.push({ name: "login" });
+          return;
+        }
+        // 保存已经调整后的关卡列表信息，用于显示
+        this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
       });
+
+    // this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
   },
   mounted() {
     // console.log("list mounted");
@@ -94,12 +101,14 @@ export default {
         this.$router.push({ name: "task_show" });
       } else if (checkpoint.status == 2) {
         // 关卡关联的默认题目
-        let question = this.$store.state.game_config.question_list[checkpoint.question];
-        
+        let question = this.$store.state.game_config.question_list[
+          checkpoint.question
+        ];
+
         // 检查该关卡是否有记录，如果有，按照记录执行
         let record = this.$store.state.record_list.list[checkpoint.id];
         if (record) {
-          question  = this.$store.state.game_config.question_list[record.qid];
+          question = this.$store.state.game_config.question_list[record.qid];
         }
         this.$store.commit("set_question", question);
         // 进入回答问题

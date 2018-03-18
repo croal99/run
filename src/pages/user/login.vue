@@ -1,8 +1,11 @@
 <template>
-  <div v-if="welcome" class="welcome">
-    <div v-html="html"></div>
-    <div class="btn-welcome-box">
+  <div>
+    <div v-html="html" class="welcome"></div>
+    <div v-if="welcome_page" class="btn-welcome-box">
       <span class="btn-welcome" @click="begin_game">让我们开始吧</span>
+    </div>
+    <div v-if="end_page" class="btn-welcome-box">
+      <span class="btn-welcome" @click="end_game">我的记录</span>
     </div>
   </div>
 </template>
@@ -12,8 +15,8 @@ import { Indicator } from "mint-ui";
 export default {
   data() {
     return {
-      show: false,
-      welcome: false,
+      end_page: false,
+      welcome_page: false,
       html: null
     };
   },
@@ -54,16 +57,31 @@ export default {
         });
     },
 
+    end_game() {
+      this.$router.push({ name: "setting" });
+    },
+
     //
     check_load_status() {
+      // 可能还没有获得记录信息
+      if (!this.$store.state.hasOwnProperty("record_list")) {
+        // 继续检查状态
+        setTimeout(this.check_load_status, 1000);
+      }
+      else if (!this.$store.state.record_list.hasOwnProperty("status")) {
+        // 继续检查状态
+        setTimeout(this.check_load_status, 1000);
+      }
+
       // console.log("checkLoading", this.$store.state.record_list.status);
       if (this.$store.state.record_list.status > 0) {
         Indicator.close();
         if (this.$store.state.record_list.status == 1) {
-          this.welcome = true;
           this.html = this.$store.state.game_config.welcome.html;
+          this.welcome_page = true;
         } else if (this.$store.state.record_list.status == 3) {
           this.html = this.$store.state.game_config.end.html;
+          this.end_page = true;
         } else {
           this.$router.push({ name: "task_list" });
         }

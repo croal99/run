@@ -8,7 +8,6 @@
 <script type="text/javascript">
 import { mapActions } from "vuex";
 import { SET_USER_INFO } from "store/actions/type";
-import { server_base_url } from "common/config";
 import wx from "weixin-js-sdk";
 
 export default {
@@ -28,11 +27,11 @@ export default {
         .get_user_info({
           code: game_code
         })
-        .then(({ data }) => {
+        .then(({data}) => {
           // 检查用户是否登录
           if (!data.login) {
             // 没有用户数据，跳转到微信登录
-            let url = server_base_url + "/user/oauth?code=" + game_code;
+            let url = "https://game.591cms.com/user/oauth?code=" + game_code;
             // console.log("not login", url);
             window.location.href = url;
             return;
