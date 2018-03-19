@@ -134,21 +134,29 @@ export default {
   },
 
   // 设置题目
-  set_question(state, question) {
-    console.log('set_question', question);
+  set_question(state, temp_question) {
+    console.log('set_question', temp_question);
     // 初始化任务数据
     state.task.answer = '';
     state.task.success = false;
 
     // 根据题目类型进行处理
-    if (question.type == 0) {
+    if (temp_question.type == 0) {
       // 从题库中抽取题目
-      this.commit('set_question_list', question.items);
+      this.commit('set_question_list', temp_question.items);
       this.commit('set_random_question');
-    } else if (question.type == 12) {
+    } else {
+      // 指定一道题卡
+      state.task.question_list = [temp_question];
+      state.task.question = temp_question;
+    }
+
+    // 对晋级书单独处理
+    let question = state.task.question;
+    if (question.type == 12) {
       // 保存到任务记录
-      state.task.question_list = [question];
-      state.task.question = question;
+      // state.task.question_list = [question];
+      // state.task.question = question;
       state.task.success = true;
 
       // 执行功能
@@ -195,15 +203,11 @@ export default {
 
       // 获取下一题
       this.commit('set_next_question', question);
-      return; // To-do??
-    } else {
-      // 指定一道题卡
-      state.task.question_list = [question];
-      state.task.question = question;
     }
-
-    // 保存当前答题编号
-    this.commit('set_question_remote');
+    else {
+      // 保存当前答题编号
+      this.commit('set_question_remote');
+    }
   },
 
   // 获取道具-服务器
