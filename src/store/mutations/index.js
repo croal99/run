@@ -135,7 +135,7 @@ export default {
 
   // 设置题目
   set_question(state, question) {
-    // console.log('set_question', question);
+    console.log('set_question', question);
     // 初始化任务数据
     state.task.answer = '';
     state.task.success = false;
@@ -153,6 +153,7 @@ export default {
 
       // 执行功能
       let item_list = question.items.split(';');
+      console.log('item_list', item_list);
       for (let key in item_list) {
         let item = item_list[key];
         let method = item.substr(0, 1);
@@ -179,8 +180,9 @@ export default {
             break;
           case '*': // 获得道具
             question = state.game_config.question_list[id];
-            state.record_list.tools.push(question);
+            // state.record_list.tools.push(question);
             // console.log('tools', question, state.record_list)
+            this.commit('set_tools_remote', question)
             break;
           case 'e': // 结束游戏
             state.record_list.status = 3;
@@ -202,6 +204,22 @@ export default {
 
     // 保存当前答题编号
     this.commit('set_question_remote');
+  },
+
+  // 获取道具-服务器
+  set_tools_remote(state, question) {
+    api.fetch.api_game_config
+      .set_record({
+        code: state.game_config.game_code,
+        type: 5, // 记录答题编号
+        cid: state.task.checkpoint.id,
+        qid: question.id,
+      })
+      .then(({
+        data
+      }) => {
+        console.log('set_tools_remote', data);
+      });
   },
 
   // 保存到服务器

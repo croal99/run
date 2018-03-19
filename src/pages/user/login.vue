@@ -21,7 +21,7 @@ export default {
     };
   },
   mounted() {
-    console.log("login");
+    // console.log("login");
     this.begin_wait();
     // this.beginWait();
 
@@ -49,10 +49,6 @@ export default {
         })
         .then(({ data }) => {
           Indicator.close();
-
-          // 保存游戏配置信息
-          // this.$store.commit("set_record_list", data);
-
           this.$router.push({ name: "task_list" });
         });
     },
@@ -67,10 +63,12 @@ export default {
       if (!this.$store.state.hasOwnProperty("record_list")) {
         // 继续检查状态
         setTimeout(this.check_load_status, 1000);
+        return;
       }
       else if (!this.$store.state.record_list.hasOwnProperty("status")) {
         // 继续检查状态
         setTimeout(this.check_load_status, 1000);
+        return;
       }
 
       // console.log("checkLoading", this.$store.state.record_list.status);

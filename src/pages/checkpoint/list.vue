@@ -7,9 +7,9 @@
     <router-link to="/user/setting" class="setting-box">
       <!--设置-->
     </router-link>
-    <div class="card-box">
+    <router-link to="/user/tools" class="card-box">
       <!--道具卡-->
-    </div>
+    </router-link>
     <div class="rank-box">
       <!--成绩-->
     </div>

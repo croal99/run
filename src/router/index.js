@@ -29,6 +29,8 @@ import noPageComponent from 'pages/error/404'
 import loginComponent from 'pages/user/login'
 //setting
 import settingComponent from 'pages/user/setting'
+//tools
+import toolsComponent from 'pages/user/tools'
 // 关卡列表
 import checkpointListComponent from 'pages/checkpoint/list'
 // 关卡任务安排
@@ -67,6 +69,11 @@ const routes = [{
     path: '/user/setting',
     name: 'setting',
     component: settingComponent
+  },
+  {
+    path: '/user/tools',
+    name: 'tools',
+    component: toolsComponent
   },
   {
     path: '/',
