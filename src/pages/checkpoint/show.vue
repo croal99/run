@@ -16,7 +16,7 @@
       <!-- <div v-html="checkpoint.content">
       </div> -->
       <!-- foot -->
-      <div v-if="answer_btn" class="btn-checkpoint-box animated zoomIn delay-time1">
+      <div v-if="answer_btn" class="btn-checkpoint-box animated fadeIn delay-time1">
         <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
         <span v-else class="btn-checkpoint" @click="shakeBegin()">摇一摇</span>
       </div>
@@ -36,7 +36,7 @@
         <span></span>
       </div>
 
-      <div class="help-page-content animated fadeInDownBig delay-time1">
+      <div class="help-page-content animated fadeInDown delay-time1">
         <div class="distance-box">
           <span class="distance">提示距离</span>
           <span class="distance-info"></span>
