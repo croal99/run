@@ -6,27 +6,27 @@
     </div>
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
-
+    
+    <span class="tool-page-title">我的道具卡</span>
     <div class="tool-box">
-      <span class="tool-page-title">我的道具卡</span>
       <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
         <img v-if="tool.count>1" :src="tool.question.content">
         <img v-else src="./images/treasure.png">
         <span v-if="tool.count>1">{{tool.count}}</span>
       </div>
     </div>
-
+    
+    <span class="tool-page-title">我的宝藏卡</span>
     <div class="treasure-box">
-      <span class="tool-page-title">我的宝藏卡</span>
       <div v-for="tool in treasure_list" :key="tool.id" class="treasure-card">
         <img v-if="tool.count>1" :src="tool.question.content">
         <img v-else src="./images/treasure.png">
         <span v-if="tool.count>1">{{tool.count}}</span>
       </div>
     </div>
-
+    
+    <span class="tool-page-title">我的数据</span>
     <div class="data-box">
-      <span class="tool-page-title">我的数据</span>
       <div class="data">
         <span class="myMark">成绩：</span>{{$store.state.record_list.mark}}分
         <span class="myTime">用时：</span>{{$store.state.record_list.time}}
