@@ -122,8 +122,8 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
-        type: 2, // 修改关卡状态
         cid: checkpoint.id,
+        type: 2, // 修改关卡状态
         status: checkpoint.status
       })
       .then(({
@@ -155,49 +155,48 @@ export default {
     let question = state.task.question;
     if (question.type == 12) {
       // 保存到任务记录
-      // state.task.question_list = [question];
-      // state.task.question = question;
+      state.task.answer = question.items;
       state.task.success = true;
 
       // 执行功能
-      let item_list = question.items.split(';');
-      console.log('item_list', item_list);
-      for (let key in item_list) {
-        let item = item_list[key];
-        let method = item.substr(0, 1);
-        let id = item.slice(1);
-        let checkpoint = null;
-        let question = null;
-        console.log(item, method, id);
+      // let item_list = question.items.split(';');
+      // console.log('item_list', item_list);
+      // for (let key in item_list) {
+      //   let item = item_list[key];
+      //   let method = item.substr(0, 1);
+      //   let id = item.slice(1);
+      //   let checkpoint = null;
+      //   let question = null;
+      //   console.log(item, method, id);
 
-        switch (method) {
-          case '+': // 打开关卡
-            checkpoint = state.game_config.checkpoint_list[id];
-            checkpoint.show = true;
-            this.commit('set_checkpoint_remote', checkpoint)
-            break;
-          case '-': // 关闭关卡
-            checkpoint = state.game_config.checkpoint_list[id];
-            checkpoint.show = false;
-            this.commit('set_checkpoint_remote', checkpoint)
-            break;
-          case 's': // 修改关卡状态
-            checkpoint = state.task.checkpoint;
-            checkpoint.status = id;
-            this.commit('set_checkpoint_remote', checkpoint)
-            break;
-          case '*': // 获得道具
-            question = state.game_config.question_list[id];
-            // state.record_list.tools.push(question);
-            // console.log('tools', question, state.record_list)
-            this.commit('set_tools_remote', question)
-            break;
-          case 'e': // 结束游戏
-            state.record_list.status = 3;
-            this.commit('set_game_remote')
-            break;
-        }
-      }
+      //   switch (method) {
+      //     case '+': // 打开关卡
+      //       checkpoint = state.game_config.checkpoint_list[id];
+      //       checkpoint.show = true;
+      //       this.commit('set_checkpoint_remote', checkpoint)
+      //       break;
+      //     case '-': // 关闭关卡
+      //       checkpoint = state.game_config.checkpoint_list[id];
+      //       checkpoint.show = false;
+      //       this.commit('set_checkpoint_remote', checkpoint)
+      //       break;
+      //     case 's': // 修改关卡状态
+      //       checkpoint = state.task.checkpoint;
+      //       checkpoint.status = id;
+      //       this.commit('set_checkpoint_remote', checkpoint)
+      //       break;
+      //     case '*': // 获得道具
+      //       question = state.game_config.question_list[id];
+      //       // state.record_list.tools.push(question);
+      //       // console.log('tools', question, state.record_list)
+      //       this.commit('set_tools_remote', question)
+      //       break;
+      //     case 'e': // 结束游戏
+      //       state.record_list.status = 3;
+      //       this.commit('set_game_remote')
+      //       break;
+      //   }
+      // }
       // 保存记录
       this.commit('set_record_remote');
 
@@ -215,8 +214,8 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
-        type: 5, // 记录答题编号
         cid: state.task.checkpoint.id,
+        type: 5, // 记录答题编号
         qid: question.id,
       })
       .then(({
@@ -231,9 +230,9 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
-        type: 3, // 记录答题编号
         cid: state.task.checkpoint.id,
         qid: state.task.question.id,
+        type: 3, // 记录答题编号
       })
       .then(({
         data
@@ -261,34 +260,6 @@ export default {
 
     let next_question = state.game_config.question_list[qid];
     this.commit('set_question', next_question);
-  },
-
-  set_question_1(state) {
-    // 获取题目
-    let checkpoint = state.checkpoint;
-    let question = state.game_config.question_list[checkpoint.question];
-
-    if (question.type > 0) {
-      // 指定一道题卡
-      state.question_list = [question];
-      state.question = question;
-    } else {
-      // 设置题库
-      this.commit('set_question_list', question.items);
-
-      // 根据记录设置当前题目
-      if (record.qid > 0) {
-        // 已经记录了题目，设置为当前题目
-        state.question = state.game_config.question_list[record.qid];
-      } else {
-        // 没有记录，从question_list中随机选择一条
-        this.commit('set_random_question');
-      }
-    }
-
-    // 解析题卡
-    let record = state.record_list.list[checkpoint.id];
-    record.qid = state.question.id;
   },
 
   // 随机选择题目
@@ -349,12 +320,14 @@ export default {
     let record = {
       cid: state.task.checkpoint.id,
       qid: state.task.question.id,
+      type: state.task.question.type,
       answer: state.task.answer,
       success: state.task.success
     }
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
+        cid: state.task.checkpoint.id,
         type: 4, // 记录答题内容
         record: record,
       })

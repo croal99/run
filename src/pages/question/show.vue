@@ -200,24 +200,6 @@ export default {
       let question = this.$store.state.task.question;
       this.$store.commit("set_next_question", question);
       this.show_question();
-
-      return;
-      this.begin_wait();
-
-      // 保存答案
-      this.$fetch.api_game_config
-        .set_record({
-          code: this.$store.state.game_config.game_code,
-          cid: this.$store.state.task.checkpoint.id,
-          type: 4, // 记录答题状态
-          record: this.$store.state.record
-        })
-        .then(({ data }) => {
-          Indicator.close();
-
-          // 保存游戏配置信息
-          // this.$store.commit("set_record_list", data);
-        });
     },
 
     // 选择照片
