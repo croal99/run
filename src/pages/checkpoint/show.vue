@@ -13,8 +13,6 @@
         <div class="task-info" v-html="html"></div>
       </div>
 
-      <!-- <div v-html="checkpoint.content">
-      </div> -->
       <!-- foot -->
       <div v-if="answer_btn" class="btn-checkpoint-box animated fadeIn delay-time1">
         <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
