@@ -14,11 +14,11 @@
         <div v-html="html"></div>
       </div>
 
-      <div v-if="answer_page" class="answer">
+      <div v-if="answer_page" class="answer answer-content-box">
         <input class="answer-input" type="text" v-model="answer">
       </div>
       <div v-if="selete_page">
-        <mt-checklist v-model="answer" :options="select_options" class="answer-check"></mt-checklist>
+        <mt-checklist v-model="answer" :options="select_options" class="answer-content-box"></mt-checklist>
       </div>
       <div v-if="shake_page">
         <img v-if="shake_qrcode_url" :src="shake_qrcode_url" class="answer-shake">
@@ -30,7 +30,7 @@
     </div>
 
     <div v-if="preview_page" class="info-content-box">
-      <img v-if="answer" class="img-responsive img-upload" :src="answer">
+      <img v-if="answer" class="img-upload" :src="answer">
       <div class="btn-main-box">
         <button class="btn-upload" @click="set_answer">确认上传</button>
         <button class="btn-cancel" @click="close_preview">取消重拍</button>
