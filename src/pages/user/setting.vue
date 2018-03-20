@@ -7,16 +7,27 @@
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
 
-    <div class="setting-page-content">
-      <div class="user-info"></div>
-      <div class="headimage"></div>
-      <img :src="user_info.headimgurl">
-      <span class="name">{{user_info.nickname}}</span>
-      <span class="reset" @click="renew">重来</span>
-      <span class="music-setting"></span>
-      <span class="about"></span>
-      <span class="copyright"></span>
-      <span class="admin"></span>
+    <div class="setting-page-content animated fadeInDown">
+      
+      <div class="user-info">
+        <img :src="user_info.headimgurl" class="headimage">
+        <span class="name">{{user_info.nickname}}</span>
+      </div>
+      
+      <div class="gamecontrol">
+        <span class="reset" @click="renew">重来</span>
+        <span class="music-setting"></span>
+      </div>
+      
+      <div class="about">
+        <span class="aboutus"></span>
+        <span class="copyright"></span>
+      </div>
+      
+      <div class="admincontrol">
+        <span class="admin"></span>
+      </div>
+      
     </div>
 
   </div>
