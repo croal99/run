@@ -163,8 +163,7 @@ export default {
 
       // 获取下一题
       this.commit('set_next_question', question);
-    }
-    else {
+    } else {
       // 保存当前答题编号
       this.commit('set_question_remote');
     }
@@ -297,6 +296,47 @@ export default {
       }) => {
         console.log('set_record_remote', data);
       });
+  },
+
+  // 设置本地位置坐标
+  set_coords(state, coords) {
+    var timestamp = Date.parse(new Date());
+    state.position.lng = coords.lng;
+    state.position.lat = coords.lat;
+    state.position.acc = coords.acc;
+    state.position.time = timestamp;
+  },
+
+  // 设置远程位置坐标
+  set_coords_remote(state) {
+    if (state.ws.readyState != 1) {
+      return;
+    }
+    if (state.userinfo == undefined) {
+      return;
+    }
+
+    let send_data = {
+      type: 'control',
+      user_id: state.userinfo.openid,
+      game_id: state.userinfo.game_code,
+      client: 'fengxun',
+      client_type: 'game',
+      target_id: 'ob',
+      message: {
+        type: 'coords',
+        coords: state.position
+      }
+    };
+
+    let send_json = JSON.stringify(send_data);
+    state.ws.send(send_json);
+  },
+
+  // 多人摇一摇计数
+  set_multi_shake(state) {
+    state.task.multi_shake_count++;
+    state.task.answer = state.task.multi_shake_count > state.task.question.answer ? state.task.multi_shake_count : '';
   },
 
   // 设置用户信息和是否登录

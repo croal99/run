@@ -17,12 +17,9 @@ const state = {
     checkpoint: null,
     question: null,
     question_list: null,
-    // status: 0,
-    // cid: 0,
-    // qid: 0,
     answer: '',
     success: false,
-    // multi_shake_count: 0, // 多人摇一摇进度
+    multi_shake_count: 0, // 多人摇一摇进度
   },
   // checkpoint: null,         // 当前关卡
   // question: null,           // 当前题目

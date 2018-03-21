@@ -15,22 +15,22 @@
       </div>
 
       <div v-if="answer_page" class="answer answer-content-box">
-        <input class="answer-input" type="text" v-model="answer">
+        <input class="answer-input" type="text" v-model="$store.state.task.answer">
       </div>
       <div v-if="selete_page">
-        <mt-checklist v-model="answer" :options="select_options" class="answer-content-box"></mt-checklist>
+        <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box"></mt-checklist>
       </div>
       <div v-if="shake_page">
         <img v-if="shake_qrcode_url" :src="shake_qrcode_url" class="answer-shake">
       </div>
 
-      <div v-if="answer_btn" class="btn-question-box">
+      <div v-if="$store.state.task.answer" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
     </div>
 
     <div v-if="preview_page" class="info-content-box">
-      <img v-if="answer" class="img-upload" :src="answer">
+      <img v-if="$store.state.task.answer" class="img-upload" :src="$store.state.task.answer">
       <div class="btn-main-box">
         <button class="btn-upload" @click="set_answer">确认上传</button>
         <button class="btn-cancel" @click="close_preview">取消重拍</button>
@@ -118,6 +118,7 @@ export default {
       this.page_index = 0;
       this.html = question.page_list[this.page_index++];
       this.answer_btn = this.page_index == question.page_list.length;
+      this.btn_text = "确定";
 
       switch (parseInt(question.type)) {
         case 3:
@@ -164,6 +165,7 @@ export default {
           break;
         case 9:
           // 任务书
+          this.$store.state.task.answer = "OK";
           this.btn_text = "确定";
           break;
         default:
@@ -177,7 +179,13 @@ export default {
     answer_question() {
       switch (parseInt(this.question.type)) {
         case 3:
-          this.chooseImage();
+          if (process.env.NODE_ENV == 'development') {
+            this.answer   = 'https://images.51fengxun.cn/media/rightanswer.png';
+            this.set_answer();
+          }
+          else {
+            this.chooseImage();
+          }
           break;
         default:
           this.set_answer();
