@@ -1,5 +1,5 @@
 <template>
-  <div class="tool-page-content">
+  <div class="tool-page">
     <!-- head begin -->
     <div class="main-title-box">
       <span></span>
@@ -7,31 +7,35 @@
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
     
-    <span class="tool-page-title">我的道具卡</span>
-    <div class="tool-box">
-      <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
-        <img v-if="tool.count>1" :src="tool.question.content">
-        <img v-else src="./images/treasure.png">
-        <span v-if="tool.count>1">{{tool.count}}</span>
-      </div>
-    </div>
+    <div class="tool-page-content animated fadeInDown">
     
-    <span class="tool-page-title">我的宝藏卡</span>
-    <div class="treasure-box">
-      <div v-for="tool in treasure_list" :key="tool.id" class="treasure-card">
-        <img v-if="tool.count>1" :src="tool.question.content">
-        <img v-else src="./images/treasure.png">
-        <span v-if="tool.count>1">{{tool.count}}</span>
+      <span class="tool-page-title1"></span>
+      <div class="tool-box">
+        <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
+          <img v-if="tool.count>1" :src="tool.question.content">
+          <img v-else src="./images/treasure.png">
+          <span v-if="tool.count>1">{{tool.count}}</span>
+        </div>
       </div>
-    </div>
     
-    <span class="tool-page-title">我的数据</span>
-    <div class="data-box">
-      <div class="data">
-        <span class="myMark">成绩：</span>{{$store.state.record_list.mark}}分
-        <span class="myTime">用时：</span>{{$store.state.record_list.time}}
-        <span class="myDistance">距离：</span>{{$store.state.record_list.mark}}米
+      <span class="tool-page-title2"></span>
+      <div class="treasure-box">
+        <div v-for="tool in treasure_list" :key="tool.id" class="treasure-card">
+          <img v-if="tool.count>1" :src="tool.question.content">
+          <img v-else src="./images/treasure.png">
+          <span v-if="tool.count>1">{{tool.count}}</span>
+        </div>
       </div>
+    
+      <span class="tool-page-title3"></span>
+      <div class="data-box">
+        <div class="data">
+          <span class="myMark">成绩：</span>{{$store.state.record_list.mark}}
+          <span class="myTime">用时：</span>{{$store.state.record_list.time}}
+          <span class="myDistance">距离：</span>{{$store.state.record_list.mark}}米
+        </div>
+      </div>
+      
     </div>
   </div>
 </template>
