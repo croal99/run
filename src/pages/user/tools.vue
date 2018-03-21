@@ -12,7 +12,7 @@
       <span class="tool-page-title1"></span>
       <div class="tool-box">
         <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
-          <img v-if="tool.count>1" :src="tool.question.content">
+          <img v-if="tool.count>0" :src="tool.question.content">
           <img v-else src="./images/treasure.png">
           <span v-if="tool.count>1">{{tool.count}}</span>
         </div>
@@ -20,10 +20,10 @@
     
       <span class="tool-page-title2"></span>
       <div class="treasure-box">
-        <div v-for="tool in treasure_list" :key="tool.id" class="treasure-card">
-          <img v-if="tool.count>1" :src="tool.question.content">
+        <div v-for="treasure in treasure_list" :key="treasure.id" class="treasure-card">
+          <img v-if="treasure.count>0" :src="treasure.question.content">
           <img v-else src="./images/treasure.png">
-          <span v-if="tool.count>1">{{tool.count}}</span>
+          <span v-if="treasure.count>1">{{treasure.count}}</span>
         </div>
       </div>
     
@@ -83,9 +83,12 @@ export default {
   mounted() {},
   methods: {
     get_tools(tools_list, question) {
+      // console.log('tools_list', tools_list);
+      // console.log('question', question);
       for (let key in tools_list) {
         let tool = tools_list[key];
         if (tool.id == question.answer) {
+          // console.log('find', question.answer);
           tool.count++;
           tool.question = question;
           return key;

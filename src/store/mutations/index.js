@@ -158,45 +158,6 @@ export default {
       state.task.answer = question.items;
       state.task.success = true;
 
-      // 执行功能
-      // let item_list = question.items.split(';');
-      // console.log('item_list', item_list);
-      // for (let key in item_list) {
-      //   let item = item_list[key];
-      //   let method = item.substr(0, 1);
-      //   let id = item.slice(1);
-      //   let checkpoint = null;
-      //   let question = null;
-      //   console.log(item, method, id);
-
-      //   switch (method) {
-      //     case '+': // 打开关卡
-      //       checkpoint = state.game_config.checkpoint_list[id];
-      //       checkpoint.show = true;
-      //       this.commit('set_checkpoint_remote', checkpoint)
-      //       break;
-      //     case '-': // 关闭关卡
-      //       checkpoint = state.game_config.checkpoint_list[id];
-      //       checkpoint.show = false;
-      //       this.commit('set_checkpoint_remote', checkpoint)
-      //       break;
-      //     case 's': // 修改关卡状态
-      //       checkpoint = state.task.checkpoint;
-      //       checkpoint.status = id;
-      //       this.commit('set_checkpoint_remote', checkpoint)
-      //       break;
-      //     case '*': // 获得道具
-      //       question = state.game_config.question_list[id];
-      //       // state.record_list.tools.push(question);
-      //       // console.log('tools', question, state.record_list)
-      //       this.commit('set_tools_remote', question)
-      //       break;
-      //     case 'e': // 结束游戏
-      //       state.record_list.status = 3;
-      //       this.commit('set_game_remote')
-      //       break;
-      //   }
-      // }
       // 保存记录
       this.commit('set_record_remote');
 
