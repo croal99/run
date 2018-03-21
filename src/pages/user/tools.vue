@@ -55,6 +55,7 @@ export default {
         b01: { id:'b01', count: 0, question: null },
         b02: { id:'b02', count: 0, question: null },
         b03: { id:'b03', count: 0, question: null },
+        b04: { id:'b04', count: 0, question: null },
       },
     };
   },
