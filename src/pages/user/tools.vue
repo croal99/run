@@ -13,7 +13,7 @@
       <div class="tool-box">
         <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
           <img v-if="tool.count>0" :src="tool.question.content">
-          <img v-else src="./images/treasure.png">
+          <img v-else src="./images/tool.jpg">
           <span v-if="tool.count>1">{{tool.count}}</span>
         </div>
       </div>
@@ -22,7 +22,7 @@
       <div class="treasure-box">
         <div v-for="treasure in treasure_list" :key="treasure.id" class="treasure-card">
           <img v-if="treasure.count>0" :src="treasure.question.content">
-          <img v-else src="./images/treasure.png">
+          <img v-else src="./images/treasure.jpg">
           <span v-if="treasure.count>1">{{treasure.count}}</span>
         </div>
       </div>
