@@ -27,6 +27,10 @@
       <div v-if="$store.state.task.answer" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
+
+      <div v-if="question.type==3" class="btn-question-box">
+        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
+      </div>
     </div>
 
     <div v-if="preview_page" class="info-content-box">
@@ -202,7 +206,7 @@ export default {
       }
       
       console.log("answer", answer);
-      this.$store.commit("answer_question", this.answer);
+      this.$store.commit("answer_question");
 
       // 设置下一题
       let question = this.$store.state.task.question;

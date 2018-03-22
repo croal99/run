@@ -253,8 +253,8 @@ export default {
   },
 
   // 回答问题
-  answer_question(state, answer) {
-    // console.log('answer_question', answer);
+  answer_question(state) {
+    console.log('answer_question', state.task.answer);
     let question = state.task.question;
 
     // 默认成绩
@@ -266,7 +266,7 @@ export default {
       // 照片/道具/任务书/晋级书，直接标记成功
       state.task.mark = parseInt(question.mark);
       state.task.success = true;
-    } else if (answer == question.answer) {
+    } else if (state.task.answer == question.answer) {
       state.task.mark = parseInt(question.mark);
       state.task.success = true;
     }
