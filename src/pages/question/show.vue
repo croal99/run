@@ -14,10 +14,10 @@
         <div v-html="html"></div>
       </div>
 
-      <div v-if="answer_page" class="answer answer-content-box">
+      <div v-if="answer_page" class="answer answer-content-box animated fadeIn delay-time1">
         <input class="answer-input" type="text" v-model="$store.state.task.answer">
       </div>
-      <div v-if="selete_page">
+      <div v-if="selete_page" class="animated fadeIn delay-time1">
         <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box"></mt-checklist>
       </div>
       <div v-if="shake_page">
@@ -133,7 +133,7 @@ export default {
         // get next question
         case 6:
           // 多选&单选
-          this.answer = [];
+          this.$store.state.task.answer = [];
           let item_list = question.items.split('<br>');
           let index = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
           for(let key in item_list) {
@@ -198,14 +198,13 @@ export default {
 
     //
     set_answer() {
-      let answer = this.answer;
       if (parseInt(this.question.type) == 6) {
         // 单选&多选题
         //   需要对选项重新排序，否则不方便判断答案
-        answer = this.answer.sort().toString();
+        let answer = this.$store.state.task.answer;
+        this.$store.state.task.answer = answer.sort().toString();
       }
       
-      console.log("answer", answer);
       this.$store.commit("answer_question");
 
       // 设置下一题

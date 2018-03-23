@@ -138,6 +138,7 @@ export default {
     console.log('set_question', temp_question);
     // 初始化任务数据
     state.task.answer = '';
+    state.task.multi_shake_count = 0;
     state.task.success = false;
 
     // 根据题目类型进行处理
@@ -336,7 +337,8 @@ export default {
   // 多人摇一摇计数
   set_multi_shake(state) {
     state.task.multi_shake_count++;
-    state.task.answer = state.task.multi_shake_count > state.task.question.answer ? state.task.multi_shake_count : '';
+    let answer = parseInt(state.task.question.answer);
+    state.task.answer = state.task.multi_shake_count > answer ? answer : '';
   },
 
   // 设置用户信息和是否登录

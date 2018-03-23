@@ -15,13 +15,15 @@ export default {
   created() {
     console.log("app create");
     // 游戏基础数据
-    this.initGame("1234");
+    if (process.env.NODE_ENV == "development") {
+      this.initGame("debug");
+    } else {
+      this.initGame("1234");
+    }
     // 微信认证
     this.initWeiChat();
     // 位置定位
     this.getLocation_h5();
-    // WebSocket
-    this.initWebSocket();
   },
   methods: {
     ...mapActions({
@@ -46,6 +48,7 @@ export default {
             return;
           }
           // 保存用户信息
+          data.game_code = game_code;
           this.set_user_info(data);
 
           // 获取游戏配置信息
@@ -59,6 +62,8 @@ export default {
               this.$store.commit("set_game_config", data);
               // get_from_local
               this.$store.commit("get_from_local");
+              // WebSocket
+              this.initWebSocket();
               // get_record_list
               this.$fetch.api_game_config
                 .get_record({
@@ -143,13 +148,13 @@ export default {
       var send_data = {
         type: "login",
         user_id: this.$store.state.user_info.openid,
-        game_id: this.$store.state.user_info.game_code,
+        game_id: this.$store.state.game_config.game_code,
         client: "fengxun",
         client_type: "game"
       };
 
       var send_json = JSON.stringify(send_data);
-      // console.log("on open", send_json);
+      console.log("on open", send_json);
       this.$store.state.ws.send(send_json);
       // this.reportInfo();
     },
