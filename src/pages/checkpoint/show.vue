@@ -53,6 +53,52 @@
         <span class="btn-close" @click="close_help()">关闭</span>
       </div>
     </div>
+
+    <div v-if="help_page" class="help-page">
+      <div class="main-title-box">
+        <span></span>
+      </div>
+
+      <div class="help-page-content animated fadeInDown delay-time1">
+        <div class="distance-box">
+          <span class="distance">提示距离</span>
+          <span class="distance-info"></span>
+        </div>
+        <div class="map-box">
+          <span class="map">显示地图</span>
+          <span class="map-info"></span>
+        </div>
+        <div class="arrive-box">
+          <span class="arrive" @click="shakeDebug()">直接到达</span>
+          <span class="arrive-info"></span>
+        </div>
+      </div>
+
+      <div class="btn-close-box animated fadeIn delay-time3">
+        <span class="btn-close" @click="close_help()">关闭</span>
+      </div>
+    </div>
+    
+    <div v-if="shake_fail_message_page" class="shake-message-page">
+
+      <div class="shake-fail-message-content">
+        <span @click="close_message()">
+          <span class="shake-fail-message"></span>
+        </span>
+      </div>
+
+    </div>
+    
+    <div v-if="distance_message_page" class="distance-message-page">
+
+      <div class="distance-message-content">
+        <span @click="close_message()">
+          <span class="distance-message"></span>
+        </span>
+      </div>
+
+    </div>
+    
   </div>
 </template>
 
