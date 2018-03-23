@@ -35,8 +35,6 @@ import toolsComponent from 'pages/user/tools'
 import checkpointListComponent from 'pages/checkpoint/list'
 // 关卡任务安排
 import checkpointShowComponent from 'pages/checkpoint/show'
-// 关卡编辑
-import mapComponent from 'pages/checkpoint/map'
 
 // 题库
 import questionShowComponent from 'pages/question/show'
@@ -95,15 +93,6 @@ const routes = [{
         path: '/checkpoint/show',
         name: 'task_show',
         component: checkpointShowComponent,
-        meta: {
-          title: "关卡信息",
-          auth: true
-        }
-      },
-      {
-        path: '/checkpoint/map',
-        name: 'map',
-        component: mapComponent,
         meta: {
           title: "关卡信息",
           auth: true

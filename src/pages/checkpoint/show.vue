@@ -71,13 +71,13 @@
         <span></span>
       </div>
 
-      <el-amap class="amap-box" zoom="17" :center="[position.lng, position.lat]" :amap-manager="amapManager" :plugin="plugin" vid="amap-vue">
+      <el-amap class="map-content" :zoom="zoom" :center="[checkpoint.lng, checkpoint.lat]" vid="amap-vue">
         <el-amap-marker :position="[checkpoint.lng, checkpoint.lat]"></el-amap-marker>
-        <el-amap-circle v-if="position" :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6"></el-amap-circle>
+        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6"></el-amap-circle>
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
-        <span class="btn-close" @click="close_help()">关闭</span>
+        <span class="btn-close" @click="close_map()">关闭</span>
       </div>
     </div>
 
@@ -95,6 +95,7 @@ export default {
     return {
       checkpoint: null,
       position: this.$store.state.position,
+      zoom: 17,
 
       shake_begin: false,
       shake_end: false,
@@ -122,6 +123,10 @@ export default {
   mounted() {},
   created() {
     let checkpoint = this.$store.state.task.checkpoint;
+    // this.position.lng = checkpoint.lng;
+    // this.position.lat = checkpoint.lat;
+    // this.position.acc = 50;
+
     // 触发条件
     this.method = checkpoint.method;
 
@@ -172,6 +177,12 @@ export default {
     show_map() {
       this.help_page = false;
       this.map_page = true;
+    },
+
+    // 关闭地图
+    close_map() {
+      this.info_page = true;
+      this.map_page = false;
     },
 
     // 显示距离
@@ -384,5 +395,9 @@ export default {
   text-align: center;
   line-height: 40px;
   color: #fff;
+}
+.map-content {
+  background: #2d3132;
+  height: 800px;
 }
 </style>
