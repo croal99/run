@@ -169,19 +169,20 @@ export default {
     },
 
     onMessage(msg) {
-      console.log("on mesage", msg, msg.data);
       let data = JSON.parse(msg.data);
       switch (data.type) {
         case "ping":
           // 心跳
           break;
+          
         case "multi_shake":
+          console.log("on mesage", msg);
           // 多人摇一摇
           this.$store.commit("set_multi_shake");
           break;
 
         default:
-          console.log("unknown message");
+          console.log("unknown message", msg);
           break;
       }
     },

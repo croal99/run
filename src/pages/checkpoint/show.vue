@@ -58,6 +58,7 @@
 
 
 <script type="text/javascript">
+import { Toast } from "mint-ui";
 import { Indicator } from "mint-ui";
 
 export default {
@@ -102,7 +103,7 @@ export default {
       alert("您的设备不支持摇一摇");
     }
 
-    this.checkpoint   = checkpoint;
+    this.checkpoint = checkpoint;
   },
   methods: {
     begin_wait() {
@@ -185,40 +186,35 @@ export default {
       console.log("shakeComplete", this.shake_begin);
       if (!this.shake_begin) return;
       this.shake_begin = false; // 防止多次进入
-      this.distance = this.getDistance(
+
+      // 计算距离，范围等参数
+      let distance = this.getDistance(
         this.position.lat,
         this.position.lng,
         this.checkpoint.lat,
         this.checkpoint.lng
       );
+      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
 
-      if (this.distance > 50) {
-        this.$dialog.toast({
-          mes: "距离目标还有" + this.distance + "米",
-          timeout: 1500,
-          callback: () => {
-            // 触发显示
-            this.shake_end = true;
-
-            this.info_page = true;
-            this.shake_page = false;
-          }
+      if (distance > range) {
+        Toast({
+          message: "距离目标还有" + distance + "米",
+          iconClass: "icon icon-success",
+          duration: 5000
         });
+        console.log("distance", distance);
+        // 触发显示
+        this.shake_end = true;
+
+        this.info_page = true;
+        this.shake_page = false;
       } else {
-        this.$dialog.toast({
-          mes: "恭喜你找到了！",
-          timeout: 1500,
-          icon: "success",
-          callback: () => {
-            // 设置题目
-            var question = this.$store.state.game_config.question_list[
-              this.checkpoint.question
-            ];
-            this.$store.commit("set_question", question);
-            // 进入回答问题
-            this.$router.push("question");
-          }
-        });
+        // Toast({
+        //   message: "恭喜你找到了！",
+        //   duration: 5000
+        // });
+        // 设置题目
+        this.onCheckpoint();
       }
     },
 
@@ -232,16 +228,11 @@ export default {
       this.distance = 0;
     },
 
-    // 直接到达点位
-    shakeDebug() {
+    // 成功到达
+    onCheckpoint() {
       this.begin_wait();
 
       let checkpoint = this.checkpoint;
-
-      // 修改当前坐标
-      this.$store.state.position.lat = checkpoint.lat;
-      this.$store.state.position.lng = checkpoint.lng;
-      this.$store.state.position.acc = checkpoint.range;
 
       // 修改关卡状态
       this.$fetch.api_game_config
@@ -253,8 +244,6 @@ export default {
         })
         .then(({ data }) => {
           Indicator.close();
-          // 保存游戏配置信息
-          // this.$store.commit("set_record_list", data);
           // 设置题目
           let question = this.$store.state.game_config.question_list[
             checkpoint.question
@@ -263,6 +252,18 @@ export default {
           // 进入回答问题
           this.$router.push({ name: "question_show" });
         });
+    },
+
+    // 直接到达点位
+    shakeDebug() {
+      let checkpoint = this.checkpoint;
+
+      // 修改当前坐标
+      this.$store.state.position.lat = checkpoint.lat;
+      this.$store.state.position.lng = checkpoint.lng;
+      this.$store.state.position.acc = checkpoint.range;
+
+      this.onCheckpoint();
     },
 
     // 扫一扫
