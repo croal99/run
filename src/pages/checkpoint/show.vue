@@ -73,7 +73,8 @@
 
       <el-amap class="map-content" :zoom="zoom" :center="[checkpoint.lng, checkpoint.lat]" vid="amap-vue">
         <el-amap-marker :position="[checkpoint.lng, checkpoint.lat]"></el-amap-marker>
-        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6"></el-amap-circle>
+        <el-amap-circle :center="[position.lng, position.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
+        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle>
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
