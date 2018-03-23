@@ -55,13 +55,13 @@
     </div>
 
     <div v-if="shake_fail_message_page" class="shake-message-page" @click="close_message">
-      <div class="shake-fail-message-content">
+      <div class="shake-fail-message-content animated tada delay-time1">
         <span class="shake-fail-message">{{message}}</span>
       </div>
     </div>
 
     <div v-if="distance_message_page" class="distance-message-page" @click="close_message">
-      <div class="distance-message-content">
+      <div class="distance-message-content animated fadeIn delay-time1">
         <span class="distance-message">{{message}}</span>
       </div>
     </div>
@@ -227,7 +227,7 @@ export default {
       );
       let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
 
-      this.message = "距离目标还有" + distance + "米",
+      this.message = "距离你的目标还有" + distance + "米",
 
       // 触发显示
       this.help_page = false;
@@ -256,7 +256,7 @@ export default {
         //   duration: 5000
         // });
         console.log("distance", distance);
-        this.message = "对不起，你还没有到达";
+        this.message = "你似乎还没有到达目的地，或者，你再摇几次？... ...";
 
         // 触发显示
         this.shake_end = true;
