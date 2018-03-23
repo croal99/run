@@ -14,11 +14,11 @@
         <div v-html="html"></div>
       </div>
 
-      <div v-if="answer_page" class="answer answer-content-box animated fadeIn delay-time1">
-        <input class="answer-input" type="text" v-model="$store.state.task.answer">
+      <div v-if="answer_page" class="answer answer-content-box">
+        <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.answer">
       </div>
-      <div v-if="selete_page" class="animated fadeIn delay-time1">
-        <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box"></mt-checklist>
+      <div v-if="selete_page">
+        <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box animated fadeIn delay-time2"></mt-checklist>
       </div>
       <div v-if="shake_page">
         <img v-if="shake_qrcode_url" :src="shake_qrcode_url" class="answer-shake">
