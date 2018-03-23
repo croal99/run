@@ -40,7 +40,7 @@
           <span class="distance-info"></span>
         </div>
         <div class="map-box">
-          <span class="map">显示地图</span>
+          <span class="map" @click="show_map">显示地图</span>
           <span class="map-info"></span>
         </div>
         <div class="arrive-box">
@@ -66,23 +66,29 @@
       </div>
     </div>
 
-    <!-- <div v-if="map_page" class="map-warp" id='amap'>
-      <el-amap class="amap-box" :zoom="zoom" :center="center" :amap-manager="amapManager" :plugin="plugin" vid="amap-vue">
-        <el-amap-marker v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :position="[checkpoint.lng, checkpoint.lat]"
-          :icon="checkpoint.icon" v-bind:key="checkpoint.id"></el-amap-marker>
+    <div v-if="map_page" class="map-page" id='amap'>
+      <div class="main-title-box">
+        <span></span>
+      </div>
+
+      <el-amap class="amap-box" zoom="17" :center="[position.lng, position.lat]" :amap-manager="amapManager" :plugin="plugin" vid="amap-vue">
+        <el-amap-marker :position="[checkpoint.lng, checkpoint.lat]"></el-amap-marker>
         <el-amap-circle v-if="position" :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6"></el-amap-circle>
       </el-amap>
-    </div> -->
+
+      <div class="btn-close-box animated fadeIn delay-time3">
+        <span class="btn-close" @click="close_help()">关闭</span>
+      </div>
+    </div>
 
   </div>
 </template>
 
-
 <script type="text/javascript">
 import { Toast } from "mint-ui";
 import { Indicator } from "mint-ui";
-// import { AMapManager } from "vue-amap";
-// let amapManager = new AMapManager();
+import { AMapManager } from "vue-amap";
+let amapManager = new AMapManager();
 
 export default {
   data() {
@@ -105,6 +111,7 @@ export default {
       info_page: true,
       shake_page: false,
       help_page: false,
+      map_page: false,
       shake_fail_message_page: false,
       distance_message_page: false,
 
@@ -159,6 +166,30 @@ export default {
     close_help() {
       this.info_page = true;
       this.help_page = false;
+    },
+
+    // 显示地图
+    show_map() {
+      this.help_page = false;
+      this.map_page = true;
+    },
+
+    // 显示距离
+    show_distance_message() {
+      // 计算距离，范围等参数
+      let distance = this.getDistance(
+        this.position.lat,
+        this.position.lng,
+        this.checkpoint.lat,
+        this.checkpoint.lng
+      );
+      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
+
+      this.message = "距离目标还有" + distance + "米",
+
+      // 触发显示
+      this.help_page = false;
+      this.distance_message_page = true;
     },
 
     // 关闭message
@@ -216,24 +247,6 @@ export default {
       }
     },
 
-    // 显示距离
-    show_distance_message() {
-      // 计算距离，范围等参数
-      let distance = this.getDistance(
-        this.position.lat,
-        this.position.lng,
-        this.checkpoint.lat,
-        this.checkpoint.lng
-      );
-      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
-
-      this.message = "距离目标还有" + distance + "米",
-
-      // 触发显示
-      this.help_page = false;
-      this.distance_message_page = true;
-    },
-
     //
     shakeComplete() {
       console.log("shakeComplete", this.shake_begin);
@@ -250,11 +263,6 @@ export default {
       let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
 
       if (distance > range) {
-        // Toast({
-        //   message: "距离目标还有" + distance + "米",
-        //   iconClass: "icon icon-success",
-        //   duration: 5000
-        // });
         console.log("distance", distance);
         this.message = "对不起，你还没有到达";
 

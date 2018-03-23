@@ -28,6 +28,8 @@ import api from './api'
 import Plugins from 'plugins'
 //导入主视图文件
 import App from './App'
+// 高德地图
+import VueAMap from 'vue-amap';
 
 import MintUI from 'mint-ui';
 import {
@@ -39,6 +41,7 @@ import 'mint-ui/lib/style.css';
 Vue.use(Plugins)
 Vue.use(api)
 Vue.use(MintUI);
+Vue.use(VueAMap);
 
 //发布后是否显示提示
 Vue.config.productionTip = false
@@ -46,13 +49,14 @@ Vue.config.productionTip = false
 //是否开启工具调试
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 
+// 高德地图
+VueAMap.initAMapApiLoader({
+  key: 'cb9f4fa508519e8ecd11f5532bfa9083',
+  plugin: ['AMap.Autocomplete', 'AMap.Geolocation', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor']
+});
+
 new Vue({
   router,
   store,
   ...App
 }).$mount('mainbody')
-
-
-Vue.prototype.beginWait = () => {
-    console.log('on opened', this);
-};
