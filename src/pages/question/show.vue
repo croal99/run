@@ -8,20 +8,19 @@
     <!-- head end -->
 
     <div v-if="info_page" class="question-info">
-      <!-- <mt-button type="primary" @click="saveImage('ksyBhWQfJCjcuGMgThgPo7VBXl1-yWegcwZNlwGkY08Qx8lPogNeKZ4QyyE15Rau')">test</mt-button> -->
-      <!-- <div v-html="question.content"></div> -->
-      <div @click="next_page">
-        <div v-html="html"></div>
+      <div v-html="html" @click="next_page">
       </div>
 
       <div v-if="answer_page" class="answer answer-content-box">
         <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.answer">
       </div>
+
       <div v-if="selete_page">
         <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box animated fadeIn delay-time2"></mt-checklist>
       </div>
+
       <div v-if="shake_page">
-        <img v-if="shake_qrcode_url" :src="shake_qrcode_url" class="answer-shake">
+        <img :src="shake_qrcode_url" class="answer-shake">
       </div>
 
       <div v-if="$store.state.task.answer" class="btn-question-box">
@@ -29,12 +28,12 @@
       </div>
 
       <div v-if="question.type==3" class="btn-question-box">
-        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
+        <span class="btn-question" @click="chooseImage">上传照片</span>
       </div>
     </div>
 
     <div v-if="preview_page" class="info-content-box">
-      <img v-if="$store.state.task.answer" class="img-upload" :src="$store.state.task.answer">
+      <img class="img-upload" :src="$store.state.task.answer">
       <div class="btn-main-box">
         <button class="btn-upload" @click="set_answer">确认上传</button>
         <button class="btn-cancel" @click="close_preview">取消重拍</button>
@@ -253,7 +252,7 @@ export default {
         .then(({ data }) => {
           Indicator.close();
           // console.log(data);
-          this.answer = data.thumb_url;
+          this.$store.state.task.answer = data.thumb_url;
           this.info_page = false;
           this.preview_page = true;
         });
