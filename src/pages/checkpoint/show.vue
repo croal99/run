@@ -40,7 +40,7 @@
           <span class="distance-info"></span>
         </div>
         <div class="map-box">
-          <span class="map" @click="show_map">显示地图</span>
+          <span class="map" @click="show_map_amap">显示地图</span>
           <span class="map-info"></span>
         </div>
         <div class="arrive-box">
@@ -71,10 +71,10 @@
         <span></span>
       </div>
 
-      <el-amap class="map-content" :zoom="zoom" :center="[checkpoint.lng, checkpoint.lat]" vid="amap-vue">
-        <el-amap-marker :position="[checkpoint.lng, checkpoint.lat]"></el-amap-marker>
-        <el-amap-circle :center="[position.lng, position.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
-        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle>
+      <el-amap class="map-content" :zoom="zoom" :center="[marker.lng, marker.lat]" vid="amap-vue">
+        <el-amap-marker :position="[marker.lng, marker.lat]"></el-amap-marker>
+        <!-- <el-amap-circle :center="[position.lng, position.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
+        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle> -->
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
@@ -96,6 +96,10 @@ export default {
     return {
       checkpoint: null,
       position: this.$store.state.position,
+      marker: {
+        lat: 0,
+        lng: 0
+      },
       zoom: 17,
 
       shake_begin: false,
@@ -123,6 +127,8 @@ export default {
   },
   mounted() {},
   created() {
+    AMap.app = this; // 在高德对象中保存VUE
+
     let checkpoint = this.$store.state.task.checkpoint;
     // this.position.lng = checkpoint.lng;
     // this.position.lat = checkpoint.lat;
@@ -175,6 +181,17 @@ export default {
     },
 
     // 显示地图
+    show_map_amap() {
+      // 转换坐标
+      AMap.convertFrom([this.checkpoint.lng, this.checkpoint.lat], 'gps',
+        function(status,result) {
+          AMap.app.marker.lat = result.locations[0].getLat();
+          AMap.app.marker.lng = result.locations[0].getLng();
+          AMap.app.show_map();
+        });
+    },
+
+    // 显示地图
     show_map() {
       this.help_page = false;
       this.map_page = true;
@@ -187,7 +204,7 @@ export default {
     },
 
     // 显示距离
-    show_distance_message() {
+    show_distance_message(lat, lng) {
       // 计算距离，范围等参数
       let distance = this.getDistance(
         this.position.lat,
@@ -195,9 +212,7 @@ export default {
         this.checkpoint.lat,
         this.checkpoint.lng
       );
-      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
-
-      this.message = "距离目标还有" + distance + "米",
+      this.message = "距离目标还有" + distance + "米";
 
       // 触发显示
       this.help_page = false;
@@ -259,31 +274,12 @@ export default {
       }
     },
 
-    // 显示距离
-    show_distance_message() {
-      // 计算距离，范围等参数
-      let distance = this.getDistance(
-        this.position.lat,
-        this.position.lng,
-        this.checkpoint.lat,
-        this.checkpoint.lng
-      );
-      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
-
-      this.message = "距离你的目标还有" + distance + "米",
-
-      // 触发显示
-      this.help_page = false;
-      this.distance_message_page = true;
-    },
-
-    //
     shakeComplete() {
       console.log("shakeComplete", this.shake_begin);
       if (!this.shake_begin) return;
       this.shake_begin = false; // 防止多次进入
 
-      // 计算距离，范围等参数
+      // 检查当前距离是否进入目标范围
       let distance = this.getDistance(
         this.position.lat,
         this.position.lng,
@@ -301,10 +297,6 @@ export default {
         this.shake_fail_message_page = true;
         this.shake_page = false;
       } else {
-        // Toast({
-        //   message: "恭喜你找到了！",
-        //   duration: 5000
-        // });
         // 设置题目
         this.onCheckpoint();
       }
@@ -365,7 +357,7 @@ export default {
         needResult: 1,
         scanType: ["qrCode", "barCode"],
         success: function(res) {
-          wx.app.scanComplete(res.resultStr);
+          // wx.app.scanComplete(res.resultStr);
         }
       });
     },
