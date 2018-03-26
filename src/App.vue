@@ -14,6 +14,10 @@ export default {
   name: "app",
   created() {
     console.log("app create");
+    let ua = navigator.userAgent;
+    this.isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    this.isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1;
+
     // 游戏基础数据
     if (process.env.NODE_ENV == "development") {
       // this.initGame("debug");
@@ -135,8 +139,14 @@ export default {
 
     // 初始化WebSocket
     initWebSocket() {
-      console.log("initWebSocket");
-      this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
+      console.log("initWebSocket", this.isAndroid);
+      // this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
+      if (this.isAndroid) {
+        this.$store.state.ws = new WebSocket("ws://api.51fengxun.cn:7273/");
+      }
+      else {
+        this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
+      }
       this.$store.state.ws.onopen = this.onOpened;
       this.$store.state.ws.onmessage = this.onMessage;
       this.$store.state.ws.onclose = this.onClose;
