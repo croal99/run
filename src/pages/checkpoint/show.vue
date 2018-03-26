@@ -71,10 +71,10 @@
         <span></span>
       </div>
 
-      <el-amap class="map-content" :zoom="zoom" :center="[marker.lng, marker.lat]" vid="amap-vue">
-        <el-amap-marker :position="[marker.lng, marker.lat]"></el-amap-marker>
-        <!-- <el-amap-circle :center="[position.lng, position.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
-        <el-amap-circle :center="[position.lng, position.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle> -->
+      <el-amap class="map-content" :zoom="zoom" :center="[marker.target.lng, marker.target.lat]" vid="amap-vue">
+        <el-amap-marker :position="[marker.target.lng, marker.target.lat]"></el-amap-marker>
+        <el-amap-circle :center="[marker.self.lng, marker.self.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
+        <el-amap-circle :center="[marker.self.lng, marker.self.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle>
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
@@ -97,13 +97,18 @@ export default {
       checkpoint: null,
       position: this.$store.state.position,
       marker: {
-        lat: 0,
-        lng: 0
+        target: {
+          lat: 0,
+          lng: 0
+        },
+        self: {
+          lat: 0,
+          lng: 0
+        },
       },
       zoom: 17,
 
       shake_begin: false,
-      shake_end: false,
       SHAKE_THRESHOLD: 4000,
       last_update: 0,
       last_x: 0,
@@ -183,10 +188,13 @@ export default {
     // 显示地图
     show_map_amap() {
       // 转换坐标
-      AMap.convertFrom([this.checkpoint.lng, this.checkpoint.lat], 'gps',
+      AMap.convertFrom([[this.checkpoint.lng, this.checkpoint.lat], [this.position.lng, this.position.lat]], 'gps',
         function(status,result) {
-          AMap.app.marker.lat = result.locations[0].getLat();
-          AMap.app.marker.lng = result.locations[0].getLng();
+          // console.log(result);
+          AMap.app.marker.target.lat = result.locations[0].getLat();
+          AMap.app.marker.target.lng = result.locations[0].getLng();
+          AMap.app.marker.self.lat = result.locations[1].getLat();
+          AMap.app.marker.self.lng = result.locations[1].getLng();
           AMap.app.show_map();
         });
     },
@@ -293,7 +301,6 @@ export default {
         this.message = "你似乎还没有到达目的地，或者，你再摇几次？... ...";
 
         // 触发显示
-        this.shake_end = true;
         this.shake_fail_message_page = true;
         this.shake_page = false;
       } else {
@@ -308,7 +315,6 @@ export default {
       this.shake_page = true;
 
       this.shake_begin = true;
-      this.shake_end = false;
       this.distance = 0;
     },
 
