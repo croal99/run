@@ -123,6 +123,7 @@ export default {
       this.html = question.page_list[this.page_index++];
       this.answer_btn = this.page_index == question.page_list.length;
       this.btn_text = "确定";
+      this.$store.state.task.answer = "";
 
       switch (parseInt(question.type)) {
         case 3:
@@ -134,6 +135,7 @@ export default {
         case 6:
           // 多选&单选
           this.$store.state.task.answer = [];
+          this.select_options = [];
           let item_list = question.items.split("<br>");
           let index = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           for (let key in item_list) {
