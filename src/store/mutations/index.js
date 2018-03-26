@@ -46,7 +46,8 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
-        type: 1, // 修改关卡状态
+        id: state.user_info.openid,
+        type: 1, // 修改游戏状态
         status: state.record_list.status
       })
       .then(({
@@ -122,6 +123,7 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
+        id: state.user_info.openid,
         cid: checkpoint.id,
         type: 2, // 修改关卡状态
         status: checkpoint.status
@@ -175,6 +177,7 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
+        id: state.user_info.openid,
         cid: state.task.checkpoint.id,
         type: 5, // 记录答题编号
         qid: question.id,
@@ -191,6 +194,7 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
+        id: state.user_info.openid,
         cid: state.task.checkpoint.id,
         qid: state.task.question.id,
         type: 3, // 记录答题编号
@@ -288,6 +292,7 @@ export default {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,
+        id: state.user_info.openid,
         cid: state.task.checkpoint.id,
         type: 4, // 记录答题内容
         record: record,

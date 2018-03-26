@@ -328,6 +328,7 @@ export default {
       this.$fetch.api_game_config
         .set_record({
           code: this.$store.state.game_config.game_code,
+          id: this.$store.state.user_info.openid,
           cid: checkpoint.id,
           type: 2, // 修改关卡状态
           status: 2 // 到达位置

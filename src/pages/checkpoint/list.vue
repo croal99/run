@@ -46,7 +46,8 @@ export default {
     // 根据记录修改关卡状态
     this.$fetch.api_game_config
       .get_record({
-        code: game_code
+        code: game_code,
+        id: this.$store.state.user_info.openid,
       })
       .then(({ data }) => {
         // 关闭等待
@@ -85,6 +86,7 @@ export default {
         this.$fetch.api_game_config
           .set_record({
             code: this.$store.state.game_config.game_code,
+            id: this.$store.state.user_info.openid,
             cid: checkpoint.id,
             type: 2, // 修改关卡状态
             status: 1 // 选中目标

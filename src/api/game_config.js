@@ -67,9 +67,6 @@ export function get_css(data) {
 
 // 保存CSS配置
 export function set_record(data) {
-  if (process.env.NODE_ENV == 'development') {
-    data.id   = 'opQHAw5hx3r8F6IbK0itzOGjDIBM'
-  }
   return fetch({
     url: port_game_config.set_record,
     method: 'post',
@@ -79,9 +76,6 @@ export function set_record(data) {
 
 // 保存CSS配置
 export function get_record(data) {
-  if (process.env.NODE_ENV == 'development') {
-    data.id   = 'opQHAw5hx3r8F6IbK0itzOGjDIBM'
-  }
   return fetch({
     url: port_game_config.get_record,
     method: 'post',

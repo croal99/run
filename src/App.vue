@@ -68,7 +68,8 @@ export default {
               // get_record_list
               this.$fetch.api_game_config
                 .get_record({
-                  code: game_code
+                  code: game_code,
+                  id: this.$store.state.user_info.openid,
                 })
                 .then(({ data }) => {
                   this.$store.commit("set_record_list", data);

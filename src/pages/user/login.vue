@@ -2,6 +2,7 @@
   <div>
     <div v-html="html" class="welcome"></div>
     <div v-if="welcome_page" class="btn-welcome-box">
+      <span class="btn-welcome" >{{$store.state.record_list.openid}}</span>
       <span class="btn-welcome" @click="begin_game">让我们开始吧</span>
     </div>
     <div v-if="end_page" class="btn-welcome-box">
