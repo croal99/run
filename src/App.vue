@@ -136,7 +136,7 @@ export default {
     // 初始化WebSocket
     initWebSocket() {
       console.log("initWebSocket");
-      this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn:7273/");
+      this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
       this.$store.state.ws.onopen = this.onOpened;
       this.$store.state.ws.onmessage = this.onMessage;
       this.$store.state.ws.onclose = this.onClose;
