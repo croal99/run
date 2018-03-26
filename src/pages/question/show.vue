@@ -57,19 +57,19 @@ export default {
       shake_qrcode_url: "",
       error_count: 0,
 
-      page_index: false,          // 分页显示索引
-      html: "",                   // 当前显示页面内容
+      page_index: false, // 分页显示索引
+      html: "", // 当前显示页面内容
 
-      select_options:[],          // 多选题选项
+      select_options: [], // 多选题选项
 
-      info_page: true,            // 题目内容页面
-      answer_page: false,         // 填空题页面
-      selete_page: false,         // 多选题页面
-      shake_page: false,          // 多人摇一摇页面
-      preview_page: false,        // 照片预览页面
+      info_page: true, // 题目内容页面
+      answer_page: false, // 填空题页面
+      selete_page: false, // 多选题页面
+      shake_page: false, // 多人摇一摇页面
+      preview_page: false, // 照片预览页面
 
-      btn_text: "确定",           // 按钮名称
-      answer_btn: false,          // 提交按钮页面
+      btn_text: "确定", // 按钮名称
+      answer_btn: false // 提交按钮页面
     };
   },
   mounted() {},
@@ -100,7 +100,7 @@ export default {
     show_question() {
       let checkpoint = this.$store.state.task.checkpoint;
       let question = this.$store.state.task.question;
-      console.log("show question", question);
+      // console.log("show question", question);
 
       // 初始化页面显示
       this.info_page = true;
@@ -133,15 +133,15 @@ export default {
         case 6:
           // 多选&单选
           this.$store.state.task.answer = [];
-          let item_list = question.items.split('<br>');
-          let index = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-          for(let key in item_list) {
+          let item_list = question.items.split("<br>");
+          let index = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          for (let key in item_list) {
             let item = item_list[key];
-            if (item.length>0) {
+            if (item.length > 0) {
               let options = {
                 label: item,
                 value: index[key]
-              }
+              };
               this.select_options.push(options);
             }
           }
@@ -151,16 +151,13 @@ export default {
         case 7:
           // 多人摇一摇
           let code =
-            "https://game.591cms.com/game/shake?id=" +
-            this.$store.state.user_info.openid +
-            "&game=" +
-            this.$store.state.game_config.game_code +
-            "&cid=" +
-            this.$store.state.task.checkpoint.id;
-          console.log("code", code);
+            "https://game.591cms.com/game/shake?token=" +
+            this.$store.state.record_list.token;
+          console.log("shake url", code);
           this.shake_qrcode_url =
-            "https://game.591cms.com/api3/shake_qrcode?code=" + code;
-          console.log("shake_qrcode_url", this.shake_qrcode_url);
+            "https://game.591cms.com/api3/shake_qrcode?code=" +
+            this.$store.state.record_list.token;
+          console.log("shake qrcode url", this.shake_qrcode_url);
           this.answer = 0;
 
           // 显示页面
@@ -182,11 +179,10 @@ export default {
     answer_question() {
       switch (parseInt(this.question.type)) {
         case 3:
-          if (process.env.NODE_ENV == 'development') {
-            this.answer   = 'https://images.51fengxun.cn/media/rightanswer.png';
+          if (process.env.NODE_ENV == "development") {
+            this.answer = "https://images.51fengxun.cn/media/rightanswer.png";
             this.set_answer();
-          }
-          else {
+          } else {
             this.chooseImage();
           }
           break;
@@ -203,7 +199,7 @@ export default {
         let answer = this.$store.state.task.answer;
         this.$store.state.task.answer = answer.sort().toString();
       }
-      
+
       this.$store.commit("answer_question");
 
       // 设置下一题

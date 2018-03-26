@@ -80,7 +80,7 @@ export default {
           //
           this.$store.commit("get_from_local");
 
-          // 读取用户记录
+          // 重新初始化用户记录
           this.$fetch.api_game_config
             .set_record({
               code: game_code,
@@ -88,10 +88,14 @@ export default {
               status: 1 // welcome
             })
             .then(({ data }) => {
-              // 保存游戏配置信息
-              // this.$store.commit("set_record_list", data);
-              // console.log("renew end");
-              this.$store.commit("set_record_list", data);
+              // get_record_list
+              this.$fetch.api_game_config
+                .get_record({
+                  code: game_code
+                })
+                .then(({ data }) => {
+                  this.$store.commit("set_record_list", data);
+                });
             });
         });
     }

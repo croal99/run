@@ -16,7 +16,8 @@ export default {
     console.log("app create");
     // 游戏基础数据
     if (process.env.NODE_ENV == "development") {
-      this.initGame("debug");
+      // this.initGame("debug");
+      this.initGame("1234");
     } else {
       this.initGame("1234");
     }
@@ -174,9 +175,9 @@ export default {
         case "ping":
           // 心跳
           break;
-          
+
         case "multi_shake":
-          console.log("on mesage", msg);
+          console.log("multi shake", msg);
           // 多人摇一摇
           this.$store.commit("set_multi_shake");
           break;

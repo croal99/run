@@ -135,7 +135,7 @@ export default {
 
   // 设置题目
   set_question(state, temp_question) {
-    console.log('set_question', temp_question);
+    // console.log('set_question', temp_question);
     // 初始化任务数据
     state.task.answer = '';
     state.task.multi_shake_count = 0;
@@ -198,7 +198,7 @@ export default {
       .then(({
         data
       }) => {
-        console.log('set_question_remote', data);
+        // console.log('set_question_remote', data);
       });
   },
 
@@ -295,7 +295,7 @@ export default {
       .then(({
         data
       }) => {
-        console.log('set_record_remote', data);
+        // console.log('set_record_remote', data);
       });
   },
 
