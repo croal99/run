@@ -90,6 +90,7 @@
 import { Toast } from "mint-ui";
 import { Indicator } from "mint-ui";
 import md5 from 'js-md5';
+import wx from "weixin-js-sdk";
 import { AMapManager } from "vue-amap";
 let amapManager = new AMapManager();
 
@@ -134,6 +135,8 @@ export default {
   },
   mounted() {},
   created() {
+    // 初始化微信接口
+    wx.app = this;
     AMap.app = this; // 在高德对象中保存VUE
 
     let checkpoint = this.$store.state.task.checkpoint;
