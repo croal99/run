@@ -16,6 +16,7 @@
       <!-- foot -->
       <div v-if="answer_btn" class="btn-checkpoint-box animated fadeIn delay-time1">
         <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
+        <!-- <span v-if="method==1" class="btn-checkpoint" @click="scanComplete('test')">扫一扫</span> -->
         <span v-else class="btn-checkpoint" @click="shakeBegin()">摇一摇</span>
       </div>
     </div>
@@ -88,6 +89,7 @@
 <script type="text/javascript">
 import { Toast } from "mint-ui";
 import { Indicator } from "mint-ui";
+import md5 from 'js-md5';
 import { AMapManager } from "vue-amap";
 let amapManager = new AMapManager();
 
@@ -364,19 +366,30 @@ export default {
         needResult: 1,
         scanType: ["qrCode", "barCode"],
         success: function(res) {
-          // wx.app.scanComplete(res.resultStr);
+          wx.app.scanComplete(res.resultStr);
         }
       });
     },
 
     scanComplete(scan_str) {
       // alert(scan_str);
-      let coords = scan_str.split(",");
-      this.$store.state.position.lng = coords[0];
-      this.$store.state.position.lat = coords[1];
-      this.$store.state.position.acc = 5;
-      this.shake_begin = true;
-      this.shakeComplete();
+      // let coords = scan_str.split(",");
+      // this.$store.state.position.lng = coords[0];
+      // this.$store.state.position.lat = coords[1];
+      // this.$store.state.position.acc = 5;
+      // this.shake_begin = true;
+      // this.shakeComplete();
+      let code = md5(scan_str);
+      if (code==this.checkpoint.code) {
+        // 设置题目
+        this.onCheckpoint();
+      }
+      else {
+        this.message = "你似乎还没有到达目的地，或者，你再找找？... ...";
+        // 触发显示
+        this.shake_fail_message_page = true;
+        this.info_page = false;
+      }
     }
   }
 };
