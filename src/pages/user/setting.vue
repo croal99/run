@@ -84,6 +84,7 @@ export default {
           this.$fetch.api_game_config
             .set_record({
               code: game_code,
+              id: this.$store.state.user_info.openid,
               type: 1, // 修改游戏状态
               status: 1 // welcome
             })
