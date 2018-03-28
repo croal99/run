@@ -1,9 +1,5 @@
 <template>
       <router-view></router-view>
-  <!-- <section class="body-warp">
-    <transition name="fade" mode="out-in">
-    </transition>
-  </section> -->
 </template>
 <script type="text/javascript">
 import { mapActions } from "vuex";
@@ -19,12 +15,7 @@ export default {
     this.isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1;
 
     // 游戏基础数据
-    if (process.env.NODE_ENV == "development") {
-      // this.initGame("debug");
-      this.initGame("1234");
-    } else {
-      this.initGame("1234");
-    }
+    this.initGame("1234");
     // 微信认证
     this.initWeiChat();
     // 位置定位
