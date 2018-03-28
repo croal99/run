@@ -188,27 +188,27 @@ export default {
           break;
 
         case "multi_shake":
-          console.log("multi shake", msg);
+          console.log("multi shake", data);
           // 多人摇一摇
           this.$store.commit("set_multi_shake");
           var send_data = {
               type: "multi_shake",
-              user_id: openid,
-              game_id: game_code,
+              user_id: this.$store.state.user_info.openid,
+              game_id: this.$store.state.game_config.game_code,
               client: "fengxun",
               client_type: "game",
               target_id: 'multi_shake',
               message: {
                   type: "multi_shake_count",
                   cid: "{$checkpoint_id}",
-                  shake_count: state.task.multi_shake_count,
-                  answer: answer,
+                  shake_count: this.$store.state.task.multi_shake_count,
+                  answer: this.$store.state.task.answer,
               }
           };
 
           var send_json = JSON.stringify(send_data);
           console.log("on shake complete", send_json);
-          ws.send(send_json);
+          this.$store.state.ws.send(send_json);
           break;
 
         default:
