@@ -15,7 +15,7 @@ export default {
     this.isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1;
 
     // 游戏基础数据
-    this.initGame("1234");
+    this.initGame("wjl01");
     // 微信认证
     this.initWeiChat();
     // 位置定位

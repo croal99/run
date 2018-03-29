@@ -106,11 +106,15 @@ export default {
         let question = this.$store.state.game_config.question_list[
           checkpoint.question
         ];
+        console.log('question', question);
 
         // 检查该关卡是否有记录，如果有，按照记录执行
         let record = this.$store.state.record_list.list[checkpoint.id];
         if (record) {
-          question = this.$store.state.game_config.question_list[record.qid];
+          if(record.qid>0) {
+            question = this.$store.state.game_config.question_list[record.qid];
+            console.log('other question', question);
+          }
         }
         this.$store.commit("set_question", question);
         // 进入回答问题
