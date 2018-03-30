@@ -39,12 +39,10 @@ export default {
 
     begin_game() {
       this.begin_wait();
-      // this.beginWait();
-
-      let game_code = this.$store.state.game_config.game_code;
       this.$fetch.api_game_config
         .set_record({
-          code: game_code,
+          code: this.$store.state.game_config.game_code,
+          id: this.$store.state.user_info.openid,
           type: 1, // 修改游戏状态
           status: 2 // 开始游戏
         })
