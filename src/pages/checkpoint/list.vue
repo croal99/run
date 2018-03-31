@@ -15,9 +15,9 @@
     <div class="tasklist">
       <ul>
         <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :style="checkpoint.css" :key="checkpoint.id" @click="set_task(checkpoint)">
-          <mt-button type="default">{{checkpoint.id}}</mt-button>
-          <mt-button type="default">{{checkpoint.status}}</mt-button>
-          <img :src="checkpoint.image" class="checkpoint-thumbnail">{{checkpoint.status}}
+          <!-- <mt-button type="default">{{checkpoint.id}}</mt-button>
+          <mt-button type="default">{{checkpoint.status}}</mt-button> -->
+          <img :src="checkpoint.image" class="checkpoint-thumbnail">
         </li>
       </ul>
     </div>
