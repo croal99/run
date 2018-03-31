@@ -20,3 +20,6 @@ export const set_record = "/game/set_record"
 
 // 下载照片
 export const download_media = "/game/download_media"
+
+// 使用道具
+export const use_tool = "/game/use_tool"

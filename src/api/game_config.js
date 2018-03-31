@@ -91,3 +91,12 @@ export function download_media(data) {
     data
   })
 }
+
+// 使用道具
+export function use_tool(data) {
+  return fetch({
+    url: port_game_config.use_tool,
+    method: 'post',
+    data
+  })
+}

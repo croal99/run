@@ -14,7 +14,7 @@
         <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
           <img v-if="tool.count>0" :src="tool.question.content">
           <img v-else src="./images/tool.jpg">
-          <span v-if="tool.count>1">{{tool.count}}</span>
+          <span >{{tool.count}}</span>
         </div>
       </div>
     

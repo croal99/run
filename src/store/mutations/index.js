@@ -173,7 +173,7 @@ export default {
   },
 
   // 获取道具-服务器
-  set_tools_remote(state, question) {
+  set_tools_remote_del(state, question) {
     api.fetch.api_game_config
       .set_record({
         code: state.game_config.game_code,

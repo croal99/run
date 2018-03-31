@@ -23,7 +23,7 @@
 
     <div v-if="shake_page" class="shake-page">
       <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
-      <mt-button type="primary" @click="shakeDebug()">到达目标点</mt-button>
+      <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button>
       <div class="shake-info animated wobble">
         <span>摇一摇手机</span>
         <img src="./images/shake.jpg">
@@ -37,15 +37,18 @@
 
       <div class="help-page-content animated fadeInDown delay-time1">
         <div class="distance-box">
-          <span class="distance" @click="show_distance_message">提示距离</span>
+          <span class="distance" @click="use_tool('a01')">提示距离</span>
+          <mt-badge size="small" type="error">{{tools_list['a01'].count}}</mt-badge>
           <span class="distance-info"></span>
         </div>
         <div class="map-box">
-          <span class="map" @click="show_map_amap">显示地图</span>
+          <span class="map" @click="use_tool('a02')">显示地图</span>
+          <mt-badge size="small" type="error">{{tools_list['a02'].count}}</mt-badge>
           <span class="map-info"></span>
         </div>
         <div class="arrive-box">
-          <span class="arrive" @click="shakeDebug()">直接到达</span>
+          <span class="arrive" @click="use_tool('a03')">直接到达</span>
+          <mt-badge size="small" type="error">{{tools_list['a03'].count}}</mt-badge>
           <span class="arrive-info"></span>
         </div>
       </div>
@@ -89,7 +92,8 @@
 <script type="text/javascript">
 import { Toast } from "mint-ui";
 import { Indicator } from "mint-ui";
-import md5 from 'js-md5';
+import { MessageBox } from "mint-ui";
+import md5 from "js-md5";
 import wx from "weixin-js-sdk";
 import { AMapManager } from "vue-amap";
 let amapManager = new AMapManager();
@@ -107,7 +111,7 @@ export default {
         self: {
           lat: 0,
           lng: 0
-        },
+        }
       },
       zoom: 17,
 
@@ -129,20 +133,23 @@ export default {
       shake_fail_message_page: false,
       distance_message_page: false,
 
+      // 道具
+      tools_list: {
+        a01: { id: "a01", count: 0, question: null }, // 距离卡
+        a02: { id: "a02", count: 0, question: null }, // 地图卡
+        a03: { id: "a03", count: 0, question: null } // 到达卡
+      },
+
       plugin: ["ToolBar"],
       amapManager: null
     };
   },
   mounted() {},
   created() {
-    // 初始化微信接口
-    wx.app = this;
-    AMap.app = this; // 在高德对象中保存VUE
-
     let checkpoint = this.$store.state.task.checkpoint;
-    // this.position.lng = checkpoint.lng;
-    // this.position.lat = checkpoint.lat;
-    // this.position.acc = 50;
+
+    wx.app = this; // 微信对象中保存VUE
+    AMap.app = this; // 高德对象中保存VUE
 
     // 触发条件
     this.method = checkpoint.method;
@@ -161,6 +168,24 @@ export default {
     }
 
     this.checkpoint = checkpoint;
+
+    // 查询道具情况
+    let tools_list = this.$store.state.record_list.tools;
+    let question_list = this.$store.state.game_config.question_list;
+
+    // 将道具添加到列表
+    for (let key in tools_list) {
+      let qid = tools_list[key];
+      let question = question_list[qid];
+      if (question == undefined) {
+        continue;
+      }
+
+      // 对道具进行识别
+      if (question.items == "tool") {
+        this.tools_list[question.answer].count++;
+      }
+    }
   },
   methods: {
     begin_wait() {
@@ -191,23 +216,64 @@ export default {
     },
 
     // 显示地图
-    show_map_amap() {
-      // 转换坐标
-      AMap.convertFrom([[this.checkpoint.lng, this.checkpoint.lat], [this.position.lng, this.position.lat]], 'gps',
-        function(status,result) {
-          // console.log(result);
-          AMap.app.marker.target.lat = result.locations[0].getLat();
-          AMap.app.marker.target.lng = result.locations[0].getLng();
-          AMap.app.marker.self.lat = result.locations[1].getLat();
-          AMap.app.marker.self.lng = result.locations[1].getLng();
-          AMap.app.show_map();
+    use_tool(card) {
+      this.$fetch.api_game_config
+        .use_tool({
+          code: this.$store.state.game_config.game_code,
+          id: this.$store.state.user_info.openid,
+          tid: card
+        })
+        .then(({ data }) => {
+          // 修改剩余卡牌数量
+          this.tools_list[data.tid].count = data.count;
+
+          // 根据结果判定是否使用道具
+          if (data.success) {
+            switch (data.tid) {
+              case "a01":
+                this.show_distance_message();
+                break;
+              case "a02":
+                this.show_map();
+                break;
+              case "a03":
+                this.fly2checkpoint();
+                break;
+            }
+          } else {
+            this.message = "你还没有获得该道具卡";
+
+            // 触发显示
+            this.help_page = false;
+            this.distance_message_page = true;
+          }
         });
     },
 
     // 显示地图
     show_map() {
-      this.help_page = false;
-      this.map_page = true;
+      this.begin_wait();
+
+      // 转换坐标
+      AMap.convertFrom(
+        [
+          [this.checkpoint.lng, this.checkpoint.lat],
+          [this.position.lng, this.position.lat]
+        ],
+        "gps",
+        function(status, result) {
+          // console.log(result);
+          Indicator.close();
+
+          // 设置显示点位
+          AMap.app.marker.target.lat = result.locations[0].getLat();
+          AMap.app.marker.target.lng = result.locations[0].getLng();
+          AMap.app.marker.self.lat = result.locations[1].getLat();
+          AMap.app.marker.self.lng = result.locations[1].getLng();
+          AMap.app.help_page = false;
+          AMap.app.map_page = true;
+        }
+      );
     },
 
     // 关闭地图
@@ -217,8 +283,7 @@ export default {
     },
 
     // 显示距离
-    show_distance_message(lat, lng) {
-      // 计算距离，范围等参数
+    show_distance_message() {
       let distance = this.getDistance(
         this.position.lat,
         this.position.lng,
@@ -237,6 +302,18 @@ export default {
       this.shake_fail_message_page = false;
       this.distance_message_page = false;
       this.info_page = true;
+    },
+
+    // 直接到达点位
+    fly2checkpoint() {
+      let checkpoint = this.checkpoint;
+
+      // 修改当前坐标
+      this.$store.state.position.lat = checkpoint.lat;
+      this.$store.state.position.lng = checkpoint.lng;
+      this.$store.state.position.acc = checkpoint.range;
+
+      this.onCheckpoint();
     },
 
     // 转换函数
@@ -350,18 +427,6 @@ export default {
         });
     },
 
-    // 直接到达点位
-    shakeDebug() {
-      let checkpoint = this.checkpoint;
-
-      // 修改当前坐标
-      this.$store.state.position.lat = checkpoint.lat;
-      this.$store.state.position.lng = checkpoint.lng;
-      this.$store.state.position.acc = checkpoint.range;
-
-      this.onCheckpoint();
-    },
-
     // 扫一扫
     scan_task() {
       wx.app = this;
@@ -383,11 +448,10 @@ export default {
       // this.shake_begin = true;
       // this.shakeComplete();
       let code = md5(scan_str);
-      if (code==this.checkpoint.code) {
+      if (code == this.checkpoint.code) {
         // 设置题目
         this.onCheckpoint();
-      }
-      else {
+      } else {
         this.message = "你似乎还没有到达目的地，或者，你再找找？... ...";
         // 触发显示
         this.shake_fail_message_page = true;
