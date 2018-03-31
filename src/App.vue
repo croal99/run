@@ -76,7 +76,7 @@ export default {
     // 初始化微信
     initWeiChat() {
       let path = window.location.href.split("#")[0];
-      // console.log("initWeiChat", path);
+      console.log("initWeiChat", path);
       this.$fetch.api_user
         .get_package({
           path: path
@@ -112,7 +112,7 @@ export default {
               ],
               success: function(res) {
                 // this.$store.state.weixin_status = true;
-                console.log("init weixin success");
+                // console.log("init weixin success");
                 // alert("授权成功");
               }
             });
@@ -131,7 +131,6 @@ export default {
     // 初始化WebSocket
     initWebSocket() {
       console.log("initWebSocket", this.isAndroid);
-      // this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
       if (this.isAndroid) {
         this.$store.state.ws = new WebSocket("ws://api.51fengxun.cn:7273/");
       }
@@ -157,7 +156,7 @@ export default {
       };
 
       var send_json = JSON.stringify(send_data);
-      console.log("on open", send_json);
+      // console.log("on open", send_json);
       this.$store.state.ws.send(send_json);
       // this.reportInfo();
     },
@@ -191,14 +190,13 @@ export default {
               target_id: 'multi_shake',
               message: {
                   type: "multi_shake_count",
-                  cid: "{$checkpoint_id}",
                   shake_count: this.$store.state.task.multi_shake_count,
                   answer: this.$store.state.task.answer,
               }
           };
 
           var send_json = JSON.stringify(send_data);
-          console.log("on shake complete", send_json);
+          // console.log("on shake complete", send_json);
           this.$store.state.ws.send(send_json);
           break;
 

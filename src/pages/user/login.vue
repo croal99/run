@@ -24,7 +24,6 @@ export default {
   mounted() {
     // console.log("login");
     this.begin_wait();
-    // this.beginWait();
 
     // 检查数据载入状态
     setTimeout(this.check_load_status, 1000);

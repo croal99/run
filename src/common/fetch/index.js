@@ -12,7 +12,8 @@
 import axios from 'axios'
 import {port_code} from 'common/port_uri'
 import router from 'src/router'
-import {Message} from 'element-ui'
+import { MessageBox } from "mint-ui";
+import { Indicator } from "mint-ui";
 import store from 'store'
 import {SET_USER_INFO} from 'store/actions/type'
 import {server_base_url} from 'common/config'
@@ -56,12 +57,19 @@ export default function fetch(options) {
       })
       .catch((error) => {
         //请求失败时,根据业务判断状态
+        // console.log('error', error);
         if (error.response) {
           let resError = error.response
           let resCode = resError.status
           let resMsg = error.message
-          Message.error('操作失败！错误原因 ' + resMsg)
-          reject({code: resCode, msg: resMsg})
+          // Message.error('操作失败！错误原因 ' + resMsg)
+          Indicator.close();
+          MessageBox('网络开小差了', resMsg);
+          // reject({code: resCode, msg: resMsg})
+        }
+        else {
+          Indicator.close();
+          MessageBox('未知错误', '请联系管理员');
         }
       })
   })
