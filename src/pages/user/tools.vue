@@ -8,6 +8,14 @@
     <!-- head end -->
     
     <div class="tool-page-content animated fadeInDown">
+      <span class="tool-page-title3"></span>
+      <div class="data-box">
+        <div class="data">
+          <span class="myMark">成绩：</span>{{$store.state.record_list.mark}}
+          <span class="myTime">用时：</span>{{$store.state.record_list.time}}
+          <!-- <span class="myDistance">距离：</span>{{$store.state.record_list.mark}}米 -->
+        </div>
+      </div>
     
       <span class="tool-page-title1"></span>
       <div class="tool-box">
@@ -27,15 +35,6 @@
         </div>
       </div>
     
-      <span class="tool-page-title3"></span>
-      <div class="data-box">
-        <div class="data">
-          <span class="myMark">成绩：</span>{{$store.state.record_list.mark}}
-          <span class="myTime">用时：</span>{{$store.state.record_list.time}}
-          <span class="myDistance">距离：</span>{{$store.state.record_list.mark}}米
-        </div>
-      </div>
-      
     </div>
   </div>
 </template>

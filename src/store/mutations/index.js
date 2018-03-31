@@ -63,21 +63,37 @@ export default {
   // 设置游戏记录
   set_record_list(state, record_list) {
     let checkpoint_list = state.game_config.checkpoint_list;
+    let question_list = state.game_config.question_list;
+    let mark = 0;
 
     // 初始化记录
     for (let key in record_list.list) {
-      let record = record_list.list[key];
-      // console.log('record', record); //这里被调用了两次
-      let checkpoint = checkpoint_list[record.cid];
+      let list = record_list.list[key];
+      // console.log('record_list', list); //这里被调用了两次
+      let checkpoint = checkpoint_list[list.cid];
       if (checkpoint) {
-        if (record.hasOwnProperty('status')) {
-          checkpoint.status = record.status;
+        // 修改关卡状态
+        if (list.hasOwnProperty('status')) {
+          checkpoint.status = list.status;
         }
-        if (record.hasOwnProperty('show')) {
-          checkpoint.show = record.show;
+        if (list.hasOwnProperty('show')) {
+          checkpoint.show = list.show;
+        }
+
+        // 计算成绩
+        for (let key_record in list['record']) {
+          let record = list['record'][key_record];
+          let question = question_list[record.qid];
+          if (record.success) {
+            mark  += parseInt(question.mark);
+            // console.log('success', question);
+          }
         }
       }
     }
+
+    // 修改总成绩
+    record_list.mark  = mark;
 
     // 根据状态，修改关卡显示图片
     for (let key in checkpoint_list) {

@@ -10,9 +10,8 @@
     <router-link to="/user/tools" class="card-box">
       <!--道具卡-->
     </router-link>
-    <div class="rank-box">
-      <!--成绩-->
-    </div>
+    <!-- <div class="rank-box">
+    </div> -->
     <div class="tasklist">
       <ul>
         <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :style="checkpoint.css" :key="checkpoint.id" @click="set_task(checkpoint)">
