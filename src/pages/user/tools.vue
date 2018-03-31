@@ -19,10 +19,17 @@
     
       <span class="tool-page-title1"></span>
       <div class="tool-box">
-        <div v-for="tool in tools_list" :key="tool.id" class="tool-card">
-          <img v-if="tool.count>0" :src="tool.question.content">
-          <img v-else src="./images/tool.jpg">
-          <span >{{tool.count}}</span>
+        <div class="tool-card">
+          <img src="./images/a01.jpg">
+          <span >{{tools_list['a01'].count}}</span>
+        </div>
+        <div class="tool-card">
+          <img src="./images/a02.jpg">
+          <span >{{tools_list['a02'].count}}</span>
+        </div>
+        <div class="tool-card">
+          <img src="./images/a03.jpg">
+          <span >{{tools_list['a03'].count}}</span>
         </div>
       </div>
     
