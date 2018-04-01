@@ -15,12 +15,12 @@
     <div class="tasklist">
       <ul>
         <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :style="checkpoint.css" :key="checkpoint.id" @click="set_task(checkpoint)">
-          <!-- <mt-button type="default">{{checkpoint.id}}</mt-button>
-          <mt-button type="default">{{checkpoint.status}}</mt-button> -->
-          <img :src="checkpoint.image" class="checkpoint-thumbnail">
+          <img v-if="checkpoint.change" :src="checkpoint.image" class="checkpoint-thumbnail animated fadeInDown delay-time3">
+          <img v-else :src="checkpoint.image" class="checkpoint-thumbnail">
         </li>
       </ul>
     </div>
+
   </div>
 </template>
 
@@ -39,13 +39,10 @@ export default {
     this.begin_wait();
     this.$store.commit("init_task");
 
-    // 修改关卡状态
-    let game_code = this.$store.state.game_config.game_code;
-
-    // 根据记录修改关卡状态
+    // 重新获取游戏记录
     this.$fetch.api_game_config
       .get_record({
-        code: game_code,
+        code: this.$store.state.game_config.game_code,
         id: this.$store.state.user_info.openid,
       })
       .then(({ data }) => {

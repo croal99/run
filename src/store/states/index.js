@@ -21,7 +21,8 @@ const state = {
     success: false,
     multi_shake_count: 0, // 多人摇一摇进度
   },
-  // checkpoint: null,         // 当前关卡
+  change_checkpoint_list: [],  // 变更状态的关卡
+  
   // question: null,           // 当前题目
   // question_list: null,      // 待选题库
   // record_list: { // 游戏完成情况（需要随时保存）

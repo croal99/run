@@ -67,6 +67,7 @@ export default {
     let mark = 0;
 
     // 初始化记录
+    state.change_checkpoint_list  = [];
     for (let key in record_list.list) {
       let list = record_list.list[key];
       // console.log('record_list', list); //这里被调用了两次
@@ -74,9 +75,23 @@ export default {
       if (checkpoint) {
         // 修改关卡状态
         if (list.hasOwnProperty('status')) {
+          if (checkpoint.status != list.status) {
+            state.change_checkpoint_list.push(checkpoint);
+            checkpoint.change = true;
+          }
+          else {
+            checkpoint.change = false;
+          }
           checkpoint.status = list.status;
         }
         if (list.hasOwnProperty('show')) {
+          if (checkpoint.show != list.show) {
+            state.change_checkpoint_list.push(checkpoint);
+            checkpoint.change = true;
+          }
+          else {
+            checkpoint.change = false;
+          }
           checkpoint.show = list.show;
         }
 
