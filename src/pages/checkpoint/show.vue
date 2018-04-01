@@ -77,8 +77,8 @@
 
       <el-amap class="map-content" :zoom="zoom" :center="[marker.target.lng, marker.target.lat]" vid="amap-vue">
         <el-amap-marker :position="[marker.target.lng, marker.target.lat]"></el-amap-marker>
-        <el-amap-circle :center="[marker.self.lng, marker.self.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
         <el-amap-circle :center="[marker.self.lng, marker.self.lat]" :radius="position.acc" fillOpacity="0.6" strokeColor="#cd2b4a" fillColor="#ffffff"></el-amap-circle>
+        <el-amap-circle :center="[marker.self.lng, marker.self.lat]" radius="5" fillOpacity="1" strokeColor="#cd2b4a" fillColor="#cd2b4a"></el-amap-circle>
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
