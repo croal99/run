@@ -22,8 +22,8 @@
     </div>
 
     <div v-if="shake_page" class="shake-page">
-      <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
-      <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button>
+      <!-- <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
+      <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button> -->
       <div class="shake-info animated wobble">
         <span>摇一摇手机</span>
         <img src="./images/shake.jpg">
@@ -369,6 +369,82 @@ export default {
       if (!this.shake_begin) return;
       this.shake_begin = false; // 防止多次进入
 
+      this.getLocation_h5();
+
+      // // 检查当前距离是否进入目标范围
+      // let distance = this.getDistance(
+      //   this.position.lat,
+      //   this.position.lng,
+      //   this.checkpoint.lat,
+      //   this.checkpoint.lng
+      // );
+      // let range = parseFloat(this.checkpoint.range) > 0 ? parseFloat(this.checkpoint.range) : 50;
+      // alert('range:'+range+',distance:'+distance);
+
+      // if (distance > range) {
+      //   console.log("distance", distance);
+      //   this.message = "你似乎还没有到达目的地，或者，你再摇几次？... ...";
+
+      //   // 触发显示
+      //   this.shake_fail_message_page = true;
+      //   this.shake_page = false;
+      // } else {
+      //   // 设置题目
+      //   this.onCheckpoint();
+      // }
+    },
+
+    // GPS定位
+    getLocation_h5() {
+      // console.log("getLocation_h5");
+      if (navigator.geolocation) {
+        var geo_options = {
+          enableHighAccuracy: true,
+          maximumAge: 30000,
+          timeout: 27000
+        };
+
+        // 启动位置采集
+        navigator.geolocation.getCurrentPosition(
+          this.onLocationComplete,
+          this.onLocationError,
+          geo_options
+        );
+      } else {
+        console.log("Browser does not support Geolocation");
+      }
+    },
+
+    // 定位失败
+    onLocationError(error) {
+      switch (error.code) {
+        case error.TIMEOUT:
+          console.log("onLocationError:TIMEOUT");
+          //   alert("onLocationError:TIMEOUT");
+          break;
+        case error.PERMISSION_DENIED:
+          console.log("onLocationError:PERMISSION_DENIED");
+          //   alert("onLocationError:PERMISSION_DENIED");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log("onLocationError:POSITION_UNAVAILABLE");
+          //   alert("onLocationError:POSITION_UNAVAILABLE");
+          break;
+      }
+
+      MessageBox('出错了', '获取你的位置失败了，请重新刷新页面');
+    },
+
+    //解析定位结果，将定位数据存储到localStorage并上传一份数据到服务器
+    onLocationComplete(position) {
+      // 保存当前位置到本地存储
+      let coords = {
+        lng: position.coords.longitude,
+        lat: position.coords.latitude,
+        acc: position.coords.accuracy
+      };
+      this.$store.commit("set_coords", coords);
+
       // 检查当前距离是否进入目标范围
       let distance = this.getDistance(
         this.position.lat,
@@ -376,7 +452,8 @@ export default {
         this.checkpoint.lat,
         this.checkpoint.lng
       );
-      let range = this.checkpoint.range > 0 ? this.checkpoint.range : 50;
+      let range = parseFloat(this.checkpoint.range) > 0 ? parseFloat(this.checkpoint.range) : 50;
+      alert('range:'+range+',distance:'+distance);
 
       if (distance > range) {
         console.log("distance", distance);
