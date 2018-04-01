@@ -69,7 +69,7 @@ export default function fetch(options) {
         }
         else {
           Indicator.close();
-          MessageBox('未知错误', '请联系管理员');
+          MessageBox('未知错误', error.message);
         }
       })
   })

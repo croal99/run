@@ -1,5 +1,8 @@
 <template>
-      <router-view></router-view>
+  <div>
+    <router-view></router-view>
+    <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div>
+  </div>
 </template>
 <script type="text/javascript">
 import { mapActions } from "vuex";
