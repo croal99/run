@@ -32,9 +32,7 @@ import App from './App'
 import VueAMap from 'vue-amap';
 
 import MintUI from 'mint-ui';
-import {
-  Indicator
-} from "mint-ui";
+import {Indicator} from "mint-ui";
 import 'mint-ui/lib/style.css';
 
 //使用自定义插件

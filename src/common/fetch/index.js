@@ -12,8 +12,8 @@
 import axios from 'axios'
 import {port_code} from 'common/port_uri'
 import router from 'src/router'
-import { MessageBox } from "mint-ui";
-import { Indicator } from "mint-ui";
+import {MessageBox} from "mint-ui";
+import {Indicator} from "mint-ui";
 import store from 'store'
 import {SET_USER_INFO} from 'store/actions/type'
 import {server_base_url} from 'common/config'
@@ -25,14 +25,12 @@ const setUserInfo = function (user) {
 
 export default function fetch(options) {
   return new Promise((resolve, reject) => {
-    // https://github.com/mzabriskie/axios
-
     //创建一个axios实例
     const instance = axios.create({
       //设置默认根地址
       baseURL: server_base_url,
       //设置请求超时设置
-      timeout: 2000,
+      timeout: 5000,
       //设置请求时的header
       headers: {
         // 'Github-url': 'https://github.com/zzmhot/vue-admin',
@@ -41,19 +39,11 @@ export default function fetch(options) {
     })
     //请求处理
     instance(options)
-      .then(({data: {code, msg, data}}) => {
+      .then(({
+        data: {code,msg,data}}) => {
         //请求成功时,根据业务判断状态
-        resolve({code, msg, data})
+        resolve({code,msg,data})
         return false
-        // if (code === port_code.success) {
-        //   resolve({code, msg, data})
-        //   return false
-        // } else if (code === port_code.unlogin) {
-        //   setUserInfo(null)
-        //   router.replace({name: "login"})
-        // }
-        // Message.warning(msg)
-        // reject({code, msg, data})
       })
       .catch((error) => {
         //请求失败时,根据业务判断状态
@@ -66,10 +56,9 @@ export default function fetch(options) {
           Indicator.close();
           MessageBox('网络开小差了', resMsg);
           // reject({code: resCode, msg: resMsg})
-        }
-        else {
+        } else {
           Indicator.close();
-          MessageBox('未知错误', error.message);
+          MessageBox('出错了', error.message);
         }
       })
   })
