@@ -18,6 +18,7 @@ import 'font-awesome/scss/font-awesome.scss'
 
 //导入Vue框架
 import Vue from 'vue'
+import VueCookies from 'vue-cookies'
 //导入组件
 import router from './router'
 //导入状态管理器
@@ -35,7 +36,7 @@ import MintUI from 'mint-ui';
 import {Indicator} from "mint-ui";
 import 'mint-ui/lib/style.css';
 
-//使用自定义插件
+Vue.use(VueCookies)
 Vue.use(Plugins)
 Vue.use(api)
 Vue.use(MintUI);

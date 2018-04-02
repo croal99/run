@@ -13,12 +13,36 @@ export default {
   name: "app",
   created() {
     console.log("app create");
+    // 手机类型判断
     let ua = navigator.userAgent;
     this.isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     this.isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1;
 
+    // 获取游戏编码
+    let game_code = window.location.href.split("#")[0].split("?")[1];
+    if (game_code==undefined) {
+      if (!this.$cookies.isKey('game_code')) {
+        console.log('add code');
+        this.$cookies.set('game_code', 'wjl01');
+      }
+      game_code = this.$cookies.get('game_code');
+    }
+    else {
+      this.$cookies.set('game_code', game_code);
+    }
+    console.log('game_code', game_code);
+
+    // 加载CSS文件
+    let head = document.getElementsByTagName('HEAD').item(0);
+    let style = document.createElement('link');
+    let timestamp = Date.parse(new Date());
+    style.href = 'https://images.51fengxun.cn/game/'+game_code+'/css/game.css?dc='+timestamp;
+    style.rel = 'stylesheet';
+    style.type = 'text/css';
+    head.appendChild(style);
+
     // 游戏基础数据
-    this.initGame("wjl01");
+    this.initGame(game_code);
     // 微信认证
     this.initWeiChat();
     // 位置定位
@@ -28,7 +52,6 @@ export default {
     ...mapActions({
       set_user_info: SET_USER_INFO
     }),
-
     // 初始化游戏
     initGame(game_code) {
       // console.log("initGame", this);
@@ -46,6 +69,7 @@ export default {
             window.location.href = url;
             return;
           }
+
           // 保存用户信息
           data.game_code = game_code;
           this.set_user_info(data);
@@ -265,7 +289,7 @@ export default {
         acc: position.coords.accuracy
       };
       this.$store.commit("set_coords", coords);
-    }
+    },
   }
 };
 </script>
