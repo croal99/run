@@ -14,9 +14,9 @@
     </div> -->
     <div class="tasklist">
       <ul>
-        <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :style="checkpoint.css" :key="checkpoint.id" @click="set_task(checkpoint)">
-          <img v-if="checkpoint.change" :src="checkpoint.image" class="checkpoint-thumbnail animated fadeInDown delay-time3">
-          <img v-else :src="checkpoint.image" class="checkpoint-thumbnail">
+        <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :key="checkpoint.id" @click="set_task(checkpoint)">
+          <img v-if="checkpoint.change" :src="checkpoint.image" :class="checkpoint.css1">
+          <img v-else :src="checkpoint.image" :class="checkpoint.css">
         </li>
       </ul>
     </div>
