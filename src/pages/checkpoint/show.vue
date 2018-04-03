@@ -541,16 +541,18 @@ export default {
 
 <style scoped>
 .shake-page {
+  position:absolute;
   background: #2d3132;
   height: 100%;
+  width:100%;
 }
 .shake-info {
   width: 200px;
   height: 250px;
-  margin: 40% auto 48%;
+  margin: 40% auto;
   font-size: 30px;
   text-align: center;
-  line-height: 40px;
+  line-height: 60px;
   color: #fff;
 }
 .map-content {
