@@ -2,14 +2,16 @@
   <div>
     <div v-html="html" class="welcome"></div>
     <div v-if="welcome_page" class="btn-welcome-box">
-      <span class="btn-welcome" >{{$store.state.record_list.openid}}</span>
+      <!-- <span class="btn-welcome" >{{$store.state.record_list.openid}}</span> -->
       <span class="btn-welcome" @click="begin_game">让我们开始吧</span>
     </div>
     <div v-if="end_page" class="btn-welcome-box">
-      <span class="btn-welcome" @click="end_game">我的记录</span>
+      <span class="btn-welcome" @click="poster">活动总结</span>
+      <span class="btn-welcome" @click="renew">重来一次</span>
     </div>
   </div>
 </template>
+
 <script type="text/javascript">
 import { Indicator } from "mint-ui";
 
@@ -53,6 +55,65 @@ export default {
 
     end_game() {
       this.$router.push({ name: "setting" });
+    },
+
+    // 重来一次
+    renew() {
+      localStorage.clear();
+      // console.log("login");
+      this.begin_wait();
+      this.end_page = false;
+
+      // 重新获取配置数据
+      var game_code = this.$store.state.game_config.game_code;
+      this.$store.commit("init_config", game_code);
+
+      // 检查数据载入状态
+      setTimeout(this.check_load_status, 1000);
+
+      // 获取游戏配置信息
+      this.$fetch.api_game_config
+        .get_config({
+          code: game_code
+        })
+        .then(({ data }) => {
+          // 保存游戏配置信息
+          // console.log(data);
+          this.$store.commit("set_game_config", data);
+
+          //
+          this.$store.commit("get_from_local");
+
+          // 重新初始化用户记录
+          this.$fetch.api_game_config
+            .set_record({
+              code: game_code,
+              id: this.$store.state.user_info.openid,
+              type: 1, // 修改游戏状态
+              status: 1 // welcome
+            })
+            .then(({ data }) => {
+              // get_record_list
+              this.$fetch.api_game_config
+                .get_record({
+                  code: game_code,
+                  id: this.$store.state.user_info.openid,
+                })
+                .then(({ data }) => {
+                  this.$store.commit("set_record_list", data);
+                });
+            });
+        });
+    },
+
+    // 显示海报
+    poster() {
+      let game_code = this.$store.state.game_config.game_code;
+      let openid = this.$store.state.user_info.openid;
+      let url = "https://game.591cms.com/game/end_share?code=" + game_code + '&id=' + openid + '&new_end=1';
+      // console.log("not login", url);
+      window.location.href = url;
+      return;
     },
 
     //
