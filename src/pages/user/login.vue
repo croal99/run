@@ -3,11 +3,11 @@
     <div v-html="html" class="welcome"></div>
     <div v-if="welcome_page" class="btn-welcome-box">
       <!-- <span class="btn-welcome" >{{$store.state.record_list.openid}}</span> -->
-      <span class="btn-welcome" @click="begin_game"></span>
+      <span class="btn-welcome animated fadeIn delay-time6" @click="begin_game"></span>
     </div>
-    <div v-if="end_page" class="btn-welcome-box">
-      <span class="btn-welcome" @click="poster">活动总结</span>
-      <span class="btn-welcome" @click="renew">重来一次</span>
+    <div v-if="end_page" class="btn-end-box">
+      <span class="btn-poster" @click="poster"></span>
+      <span class="btn-renew" @click="renew"></span>
     </div>
   </div>
 </template>
