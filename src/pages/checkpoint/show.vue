@@ -453,7 +453,7 @@ export default {
         this.checkpoint.lng
       );
       let range = parseFloat(this.checkpoint.range) > 0 ? parseFloat(this.checkpoint.range) : 50;
-      alert('range:'+range+',distance:'+distance);
+      // alert('range:'+range+',distance:'+distance);
 
       if (distance > range) {
         console.log("distance", distance);
@@ -517,13 +517,6 @@ export default {
     },
 
     scanComplete(scan_str) {
-      // alert(scan_str);
-      // let coords = scan_str.split(",");
-      // this.$store.state.position.lng = coords[0];
-      // this.$store.state.position.lat = coords[1];
-      // this.$store.state.position.acc = 5;
-      // this.shake_begin = true;
-      // this.shakeComplete();
       let code = md5(scan_str);
       if (code == this.checkpoint.code) {
         // 设置题目
