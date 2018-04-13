@@ -63,7 +63,8 @@ export default {
           // 检查用户是否登录
           if (!data.login) {
             // 没有用户数据，跳转到微信登录
-            let url = "https://game.591cms.com/user/oauth?code=" + game_code;
+            // let url = "https://game.591cms.com/user/oauth?code=" + game_code;
+            let url = "https://game.591cms.com/user/";
             // console.log("not login", url);
             window.location.href = url;
             return;
