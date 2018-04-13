@@ -57,10 +57,9 @@ export default {
       // console.log("initGame", this);
       // 从服务器获取用户信息
       this.$fetch.api_user
-        .get_user_info({
-          code: game_code
-        })
+        .get_user_info({code: game_code})
         .then(({ data }) => {
+          console.log('get user info');
           // 检查用户是否登录
           if (!data.login) {
             // 没有用户数据，跳转到微信登录
@@ -157,12 +156,13 @@ export default {
 
     // 初始化WebSocket
     initWebSocket() {
-      console.log("initWebSocket", this.isAndroid);
       if (this.isAndroid) {
         this.$store.state.ws = new WebSocket("ws://api.51fengxun.cn:7273/");
+        console.log("init Android WebSocket");
       }
       else {
         this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
+        console.log("init IOS WebSocket");
       }
       this.$store.state.ws.onopen = this.onOpened;
       this.$store.state.ws.onmessage = this.onMessage;
