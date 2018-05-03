@@ -100,8 +100,7 @@ export default {
           let record = list['record'][key_record];
           let question = question_list[record.qid];
           if (record.success) {
-            mark  += parseInt(question.mark);
-            // console.log('success', question);
+            mark  += Number(question.mark);
           }
         }
       }
