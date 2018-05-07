@@ -53,7 +53,7 @@ export default {
       // 从服务器获取用户信息
       this.$fetch.api_user
         .get_user_info({code: game_code})
-        .then(({code, data}) => {
+        .then(({code, data, msg}) => {
           console.log('get user info', code);
           // 检查用户是否登录
           if (code==100) {
@@ -70,6 +70,9 @@ export default {
             let user_info = {'game_code': game_code, 'status':2}
             this.$store.commit("set_user_info", user_info);
             return;
+          }
+          else if (code!=0) {
+            MessageBox('出错了！', msg);
           }
 
           // 保存用户信息
