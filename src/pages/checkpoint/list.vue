@@ -48,7 +48,6 @@ export default {
       .then(({ data }) => {
         // 关闭等待
         Indicator.close();
-        console.log("get_record_list", data);
         this.$store.commit("set_record_list", data);
         if (this.$store.state.record_list.status == 3) {
           // 游戏结束

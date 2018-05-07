@@ -40,6 +40,18 @@ export function get_user_info(data) {
   })
 }
 
+// 用户认证
+export function user_auth(data) {
+  if (process.env.NODE_ENV == 'development') {
+    data.id   = 'opQHAw5hx3r8F6IbK0itzOGjDIBM'
+  }
+  return fetch({
+    url: port_user.user_auth,
+    method: 'post',
+    data
+  })
+}
+
 // 获取get_package配置
 export function get_package(data) {
   // console.log('get_package', data);

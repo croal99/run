@@ -5,8 +5,6 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapActions } from "vuex";
-import { SET_USER_INFO } from "store/actions/type";
 import wx from "weixin-js-sdk";
 
 export default {
@@ -49,19 +47,16 @@ export default {
     this.getLocation_h5();
   },
   methods: {
-    ...mapActions({
-      set_user_info: SET_USER_INFO
-    }),
     // 初始化游戏
     initGame(game_code) {
       // console.log("initGame", this);
       // 从服务器获取用户信息
       this.$fetch.api_user
         .get_user_info({code: game_code})
-        .then(({ data }) => {
-          console.log('get user info');
+        .then(({code, data}) => {
+          console.log('get user info', code);
           // 检查用户是否登录
-          if (!data.login) {
+          if (code==100) {
             // 没有用户数据，跳转到微信登录
             let url = "https://game.591cms.com/user/oauth?code=" + game_code;
             // let url = "https://game.591cms.com/user/";
@@ -69,10 +64,16 @@ export default {
             window.location.href = url;
             return;
           }
+          else if (code==101) {
+            // 需要认证码
+            console.log('need auth code', game_code);
+            let user_info = {'game_code': game_code, 'status':2}
+            this.$store.commit("set_user_info", user_info);
+            return;
+          }
 
           // 保存用户信息
-          data.game_code = game_code;
-          this.set_user_info(data);
+          this.$store.commit("set_user_info", data);
 
           // 获取游戏配置信息
           this.$fetch.api_game_config
@@ -83,8 +84,6 @@ export default {
               // 保存游戏配置信息
               // console.log(data);
               this.$store.commit("set_game_config", data);
-              // get_from_local
-              this.$store.commit("get_from_local");
               // WebSocket
               this.initWebSocket();
               // get_record_list

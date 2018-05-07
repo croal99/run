@@ -4,6 +4,7 @@ import {
 
 const state = {
   user_info: { // 用户基础信息
+    status: -1,     // 等待
     login: false // 是否登录
   },
   game_config: null, // 游戏基础配置

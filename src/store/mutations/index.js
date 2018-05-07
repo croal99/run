@@ -27,6 +27,10 @@ export default {
     state.task.success = false;
   },
 
+  set_user_info(state, user_info) {
+    state.user_info = user_info;
+  },
+
   init_config(state) {
     // 初始化当前任务
     this.commit('init_task');

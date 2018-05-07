@@ -131,7 +131,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   NProgress.done().start()
   let toName = to.name
-  let is_login = store.state.user_info.login
+  let is_login = store.state.user_info.status == 0;
 
   // if (to.name != 'login') {
   //   console.log(store.state, is_login);
