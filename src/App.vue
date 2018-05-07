@@ -73,6 +73,7 @@ export default {
           }
           else if (code!=0) {
             MessageBox('出错了！', msg);
+            return;
           }
 
           // 保存用户信息
