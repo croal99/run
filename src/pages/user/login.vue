@@ -2,8 +2,9 @@
   <div>
     <div v-html="html" class="welcome"></div>
     <div v-if="input_auth" class="input-auth">
+      <span class="invite-text">请输入邀请码</span>
       <input type="text" v-model="auth">
-      <span class="btn-checkpoint" @click="check_auth()">邀请码</span>
+      <span class="btn-checkpoint" @click="check_auth()"> 确 定 </span>
     </div>
     <div v-if="welcome_page" class="btn-welcome-box">
       <!-- <span class="btn-welcome" >{{$store.state.record_list.openid}}</span> -->
