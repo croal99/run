@@ -7,7 +7,7 @@
     <router-link to="/user/setting" class="setting-box">
       <!--设置-->
     </router-link>
-    <router-link to="/user/rank" class="setting-box">
+    <router-link to="/user/rank" class="rank-box">
       <!--排行榜-->
     </router-link>
     <router-link to="/user/tools" class="card-box">
