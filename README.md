@@ -54,6 +54,7 @@ npm run build
 │   │   ├── user                     // 用户
 │   │   │   ├── images               // 圖片
 │   │   │   ├── login.vue            // 用户登录welcome
+│   │   │   ├── rank.vue             // 用户排行榜页面
 │   │   │   ├── setting.vue          // 用户设置setting（基本信息，重玩）
 │   │   │   ├── tools.vue            // 用户道具&成绩等等tools
 │   ├── plugins                      // 各种插件

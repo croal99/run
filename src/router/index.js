@@ -31,6 +31,8 @@ import loginComponent from 'pages/user/login'
 import settingComponent from 'pages/user/setting'
 //tools
 import toolsComponent from 'pages/user/tools'
+//rank
+import rankComponent from 'pages/user/rank'
 // 关卡列表
 import checkpointListComponent from 'pages/checkpoint/list'
 // 关卡任务安排
@@ -66,6 +68,11 @@ const routes = [{
     path: '/user/tools',
     name: 'tools',
     component: toolsComponent
+  },
+  {
+    path: '/user/rank',
+    name: 'rank',
+    component: rankComponent
   },
   {
     path: '/',
