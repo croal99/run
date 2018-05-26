@@ -290,7 +290,7 @@ export default {
         this.checkpoint.lat,
         this.checkpoint.lng
       );
-      this.message = "距离目标还有" + distance + "米";
+      this.message = "距离目标还有<br>" + distance + "米";
 
       // 触发显示
       this.help_page = false;
