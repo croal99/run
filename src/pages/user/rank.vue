@@ -1,13 +1,13 @@
 <template>
-  <div class="setting-page">
+  <div class="rank-page">
     <!-- head begin -->
     <div class="main-title-box">
       <span></span>
     </div>
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
-    <div class="info-content-box">
-        <div class="dialog3 animated fadeIn">
+    <div class="rank-content-box">
+        <div class="dialog-rank animated fadeIn">
             <iframe :src="iframeurl">
             <p>Your browser does not support iframes.</p>
             </iframe>
