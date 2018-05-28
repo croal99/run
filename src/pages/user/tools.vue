@@ -20,15 +20,15 @@
       <span class="tool-page-title1"></span>
       <div class="tool-box">
         <div class="tool-card">
-          <img src="./images/a01.jpg">
+          <img :src="tools_list['a01'].question.content">
           <span >{{tools_list['a01'].count}}</span>
         </div>
         <div class="tool-card">
-          <img src="./images/a02.jpg">
+          <img :src="tools_list['a02'].question.content">
           <span >{{tools_list['a02'].count}}</span>
         </div>
         <div class="tool-card">
-          <img src="./images/a03.jpg">
+          <img :src="tools_list['a03'].question.content">
           <span >{{tools_list['a03'].count}}</span>
         </div>
       </div>
@@ -53,15 +53,11 @@ export default {
   data() {
     return {
       tools_list: {
-        a01: { id:'a01', count: 0, question: null },
-        a02: { id:'a02', count: 0, question: null },
-        a03: { id:'a03', count: 0, question: null },
+        a01: { id:'a01', count: 0, question: {content : "/play/static/images/b4cc69ac.jpg"} },
+        a02: { id:'a02', count: 0, question: {content : "/play/static/images/6c1d87f7.jpg"} },
+        a03: { id:'a03', count: 0, question: {content : "/play/static/images/fa3c0520.jpg"} },
       },
       treasure_list: {
-        b01: { id:'b01', count: 0, question: null },
-        b02: { id:'b02', count: 0, question: null },
-        b03: { id:'b03', count: 0, question: null },
-        b04: { id:'b04', count: 0, question: null },
       },
     };
   },
@@ -82,7 +78,7 @@ export default {
         this.get_tools(this.tools_list, question);
       }
       else if (question.items == "treasure") {
-        this.get_tools(this.treasure_list, question);
+        this.get_treasure(question);
       }
     }
   },
@@ -93,6 +89,23 @@ export default {
       // console.log('question', question);
       for (let key in tools_list) {
         let tool = tools_list[key];
+        if (tool.id == question.answer) {
+          // console.log('find', question.answer);
+          tool.count++;
+          tool.question = question;
+          return key;
+        }
+      }
+
+      return -1;
+    },
+    get_treasure(question) {
+      // console.log('tools_list', tools_list);
+      // console.log('question', question);
+      let id = question.answer;
+      this.treasure_list[id] = { id:id, count: 0, question: null };
+      for (let key in this.treasure_list) {
+        let tool = this.treasure_list[key];
         if (tool.id == question.answer) {
           // console.log('find', question.answer);
           tool.count++;
