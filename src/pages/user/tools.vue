@@ -20,15 +20,15 @@
       <span class="tool-page-title1"></span>
       <div class="tool-box">
         <div class="tool-card">
-          <img :src="tools_list['a01'].question.content">
+          <img src="./images/a01.jpg">
           <span >{{tools_list['a01'].count}}</span>
         </div>
         <div class="tool-card">
-          <img :src="tools_list['a02'].question.content">
+          <img src="./images/a02.jpg">
           <span >{{tools_list['a02'].count}}</span>
         </div>
         <div class="tool-card">
-          <img :src="tools_list['a03'].question.content">
+          <img src="./images/a03.jpg">
           <span >{{tools_list['a03'].count}}</span>
         </div>
       </div>
@@ -57,7 +57,7 @@ export default {
         a02: { id:'a02', count: 0, question: {content : "/play/static/images/6c1d87f7.jpg"} },
         a03: { id:'a03', count: 0, question: {content : "/play/static/images/fa3c0520.jpg"} },
       },
-      treasure_list: {
+      treasure_list: { 
       },
     };
   },
