@@ -13,8 +13,7 @@
     <router-link to="/user/tools" class="card-box">
       <!--道具卡-->
     </router-link>
-    <!-- <div class="rank-box">
-    </div> -->
+    
     <div class="tasklist">
       <ul>
         <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :key="checkpoint.id" @click="set_task(checkpoint)">
