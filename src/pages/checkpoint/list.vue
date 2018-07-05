@@ -14,6 +14,8 @@
       <!--道具卡-->
     </router-link>
     
+    <div class="decorate"></div>
+    
     <div class="tasklist">
       <ul>
         <li v-for="checkpoint in checkpoint_list" v-if="checkpoint.show" :key="checkpoint.id" @click="set_task(checkpoint)">
