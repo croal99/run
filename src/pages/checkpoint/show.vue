@@ -8,8 +8,6 @@
       <router-link to="/checkpoint/list" class="back-box"></router-link>
       <span class="help-box" @click="show_help"></span>
       <!-- head end -->
-      
-      <div class="decorate"></div>
 
       <div @click="next_page">
         <div class="task-info" v-html="html"></div>
