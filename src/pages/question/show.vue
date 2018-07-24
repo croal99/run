@@ -12,7 +12,7 @@
       </div>
 
       <div v-if="answer_page" class="answer answer-content-box">
-        <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.answer">
+        <input class="answer-input animated fadeInUp delay-time4" type="text" v-model="$store.state.task.answer">
       </div>
 
       <div v-if="selete_page">
