@@ -21,7 +21,8 @@
 
       <div v-if="shake_page">
         <img :src="shake_qrcode_url" class="answer-shake">
-        <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.multi_shake_count">
+        <el-progress :text-inside="true" :stroke-width="28" :percentage="$store.state.task.multi_shake_count"></el-progress>
+        <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.multi_shake_count"> -->
       </div>
 
       <div v-if="$store.state.task.answer" class="btn-question-box">
