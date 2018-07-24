@@ -14,7 +14,8 @@
 //导入样式
 import 'normalize.css'
 import 'font-awesome/scss/font-awesome.scss'
-// import 'element-ui/lib/theme-default/index.css'
+import 'element-ui/lib/theme-default/index.css'
+// import 'element-ui/lib/theme-chalk/index.css';
 
 //导入Vue框架
 import Vue from 'vue'
@@ -31,7 +32,8 @@ import Plugins from 'plugins'
 import App from './App'
 // 高德地图
 import VueAMap from 'vue-amap';
-
+// UI
+import ElementUI from 'element-ui';
 import MintUI from 'mint-ui';
 import {Indicator} from "mint-ui";
 import 'mint-ui/lib/style.css';
@@ -40,6 +42,7 @@ Vue.use(VueCookies)
 Vue.use(Plugins)
 Vue.use(api)
 Vue.use(MintUI);
+Vue.use(ElementUI);
 Vue.use(VueAMap);
 
 //发布后是否显示提示
