@@ -37,17 +37,17 @@
 
       <div class="help-page-content animated fadeInDown delay-time1">
         <div class="distance-box">
-          <span class="distance" @click="use_tool('a01')">提示距离</span>
+          <span class="distance" @click="use_tool('a01')">提示距离/DISTANCE</span>
           <mt-badge size="small" type="error">{{tools_list['a01'].count}}</mt-badge>
           <span class="distance-info"></span>
         </div>
         <div class="map-box">
-          <span class="map" @click="use_tool('a02')">显示地图</span>
+          <span class="map" @click="use_tool('a02')">显示地图/NAVIGATE</span>
           <mt-badge size="small" type="error">{{tools_list['a02'].count}}</mt-badge>
           <span class="map-info"></span>
         </div>
         <div class="arrive-box">
-          <span class="arrive" @click="use_tool('a03')">直接到达</span>
+          <span class="arrive" @click="use_tool('a03')">直接到达/ARRIVE</span>
           <mt-badge size="small" type="error">{{tools_list['a03'].count}}</mt-badge>
           <span class="arrive-info"></span>
         </div>
@@ -457,7 +457,7 @@ export default {
 
       if (distance > range) {
         console.log("distance", distance);
-        this.message = "你似乎还没有到达目的地，或者，你再摇几次？... ...";
+        this.message = "您似乎还没有到达目的地，或者，再摇几次？<br>You shaked out nothing. T";
 
         // 触发显示
         this.shake_fail_message_page = true;
@@ -522,7 +522,7 @@ export default {
         // 设置题目
         this.onCheckpoint();
       } else {
-        this.message = "你似乎还没有到达目的地，或者，你再找找？... ...";
+        this.message = "您似乎还没有到达目的地，或者，再找找？<br>You scanned out nothing. Try more.";
         // 触发显示
         this.shake_fail_message_page = true;
         this.info_page = false;
