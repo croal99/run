@@ -25,7 +25,7 @@
       <!-- <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
       <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button> -->
       <div class="shake-info animated wobble">
-        <span>摇一摇手机</span>
+        <span>摇一摇手机<br>SHAKE</span>
         <img src="./images/shake.jpg">
       </div>
     </div>
