@@ -457,7 +457,7 @@ export default {
 
       if (distance > range) {
         console.log("distance", distance);
-        this.message = "您似乎还没有到达目的地，或者，再摇几次？<br>You shaked out nothing. T";
+        this.message = "您似乎还没有到达目的地，或者，再摇几次？ You shaked out nothing. Try more.";
 
         // 触发显示
         this.shake_fail_message_page = true;
@@ -522,7 +522,7 @@ export default {
         // 设置题目
         this.onCheckpoint();
       } else {
-        this.message = "您似乎还没有到达目的地，或者，再找找？<br>You scanned out nothing. Try more.";
+        this.message = "您似乎还没有到达目的地，或者，再找找？ You scanned out nothing. Try more.";
         // 触发显示
         this.shake_fail_message_page = true;
         this.info_page = false;
