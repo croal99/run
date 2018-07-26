@@ -20,15 +20,15 @@
       <span class="tool-page-title1"></span>
       <div class="tool-box">
         <div class="tool-card">
-          <img src="./images/a01.jpg">
+          <img :src="tools_list['a01'].question.content">
           <span >{{tools_list['a01'].count}}</span>
         </div>
         <div class="tool-card">
-          <img src="./images/a02.jpg">
+          <img :src="tools_list['a02'].question.content">
           <span >{{tools_list['a02'].count}}</span>
         </div>
         <div class="tool-card">
-          <img src="./images/a03.jpg">
+          <img :src="tools_list['a03'].question.content">
           <span >{{tools_list['a03'].count}}</span>
         </div>
       </div>
@@ -53,9 +53,9 @@ export default {
   data() {
     return {
       tools_list: {
-        a01: { id:'a01', count: 0, question: {content : "/play/static/images/b4cc69ac.jpg"} },
-        a02: { id:'a02', count: 0, question: {content : "/play/static/images/6c1d87f7.jpg"} },
-        a03: { id:'a03', count: 0, question: {content : "/play/static/images/fa3c0520.jpg"} },
+        a01: { id:'a01', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b581586aefbf.jpg"} },
+        a02: { id:'a02', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b581596d7c0e.jpg"} },
+        a03: { id:'a03', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b58159f93a3e.jpg"} },
       },
       treasure_list: { 
       },
