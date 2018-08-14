@@ -37,6 +37,10 @@ import rankComponent from 'pages/user/rank'
 import checkpointListComponent from 'pages/checkpoint/list'
 // 关卡任务安排
 import checkpointShowComponent from 'pages/checkpoint/show'
+// 关卡任务成功信息
+import checkpointSuccessComponent from 'pages/checkpoint/success'
+// 关卡任务失败信息
+import checkpointDefaultComponent from 'pages/checkpoint/default'
 
 // 题库
 import questionShowComponent from 'pages/question/show'
@@ -102,6 +106,24 @@ const routes = [{
         component: checkpointShowComponent,
         meta: {
           title: "关卡信息",
+          auth: true
+        }
+      },
+      {
+        path: '/checkpoint/show',
+        name: 'task_success',
+        component: checkpointSuccessComponent,
+        meta: {
+          title: "关卡成功",
+          auth: true
+        }
+      },
+      {
+        path: '/checkpoint/show',
+        name: 'task_default',
+        component: checkpointDefaultComponent,
+        meta: {
+          title: "关卡失败",
           auth: true
         }
       },

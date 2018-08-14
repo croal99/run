@@ -65,7 +65,7 @@
     </div>
 
     <div v-if="distance_message_page" class="distance-message-page" @click="close_message">
-      <div class="distance-message-content animated fadeIn delay-time1 distance-limit">
+      <div class="distance-message-content animated fadeIn delay-time1">
         <span class="distance-message">{{message}}</span>
       </div>
     </div>
@@ -290,7 +290,7 @@ export default {
         this.checkpoint.lat,
         this.checkpoint.lng
       );
-      this.message = "距离目标还有" + distance + "米";
+      this.message = "距离目标还有：" + distance + "米";
 
       // 触发显示
       this.help_page = false;
@@ -551,9 +551,5 @@ export default {
 .map-content {
   background: #2d3132;
   height: 800px;
-}
-.distance-limit
-{
-width:170px;
 }
 </style>
