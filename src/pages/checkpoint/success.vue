@@ -8,13 +8,13 @@
       <router-link to="/checkpoint/list" class="back-box"></router-link>
       <!-- head end -->
       <div id="info"  v-for="question in html">
-        <div v-if="question.type==3">这是上传照片<img class="img-responsive" :src="question.answer"></div>
+        <div v-if="question.type==3" class="record-content-box">这是上传照片<img class="img-responsive" :src="question.answer"></div>
         <div v-if="question.type==6">
           <div v-html="question.content"></div>
           <mt-checklist v-model="value" :options="question.items" class="answer-content-box animated fadeInUp delay-time4"></mt-checklist>
-          <div>选择的答案：{{question.answer}}</div>
+          <div class="record-content-box">选择的答案：{{question.answer}}</div>
         </div>
-        <div v-if="question.type==7">7</div>
+        <!-- <div class="record-content-box" v-if="question.type==7">7</div>-->
       </div>
 
 <!-- {{this.$store.state.record_list}}
@@ -73,23 +73,25 @@ export default {
     show_info(){
       for(let questionid in this.record){
         this.html[questionid] = this.question_list[questionid];
+        this.html[questionid].answer = this.record[questionid].answer;
         if(this.html[questionid].type == 6){
           let items = this.question_list[questionid].items;
-          let item_list = items.split("<br>");
-          this.html[questionid].items = [];
-          let index = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          for (let key in item_list) {
-            let item = item_list[key];
-            if (item.length > 0) {
-              let options = {
-                label: item,
-                value: index[key]
-              };
-              this.html[questionid].items.push(options);
+          try{
+            let item_list = items.split("<br>");
+            this.html[questionid].items = [];
+            let index = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let key in item_list) {
+              let item = item_list[key];
+              if (item.length > 0) {
+                let options = {
+                  label: item,
+                  value: index[key]
+                };
+                this.html[questionid].items.push(options);
+              }
             }
-          }
+          }catch(e){}
         }
-        this.html[questionid].answer = this.record[questionid].answer;
       }
     }
   }

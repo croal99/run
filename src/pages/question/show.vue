@@ -30,7 +30,7 @@
       </div>
 
       <div v-if="question.type==3" class="btn-question-box">
-        <span class="btn-question" @click="chooseImage">上传照片</span>
+        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
     </div>
 
@@ -184,7 +184,7 @@ export default {
       switch (parseInt(this.question.type)) {
         case 3:
           if (process.env.NODE_ENV == "development") {
-            this.answer = "https://images.51fengxun.cn/media/rightanswer.png";
+            this.$store.state.task.answer = "https://images.51fengxun.cn/media/rightanswer.png";
             this.set_answer();
           } else {
             this.chooseImage();

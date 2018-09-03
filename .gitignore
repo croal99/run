@@ -33,3 +33,4 @@ dist/
 package-lock.json
 backup
 /.vscode
+src/api/user.js

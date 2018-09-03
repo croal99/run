@@ -31,7 +31,7 @@ export function logout() {
 // 用户信息
 export function get_user_info(data) {
   if (process.env.NODE_ENV == 'development') {
-    data.id   = 'opQHAw5hx3r8F6IbK0itzOGjDIBM'
+    data.id   = 'opQHAw9zQsumOAvkeJMSQ-ESNZgk'
   }
   return fetch({
     url: port_user.get_userinfo,
@@ -43,7 +43,7 @@ export function get_user_info(data) {
 // 用户认证
 export function user_auth(data) {
   if (process.env.NODE_ENV == 'development') {
-    data.id   = 'opQHAw5hx3r8F6IbK0itzOGjDIBM'
+    data.id   = 'opQHAw9zQsumOAvkeJMSQ-ESNZgk'
   }
   return fetch({
     url: port_user.user_auth,

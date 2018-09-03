@@ -13,6 +13,8 @@
     <router-link to="/user/tools" class="card-box">
       <!--道具卡-->
     </router-link>
+    <div id="product-sec-countdown" class="time-box"></div>
+      <!--计时器-->
     
     <div class="decorate"></div>
     
@@ -34,7 +36,7 @@ import { Indicator } from "mint-ui";
 export default {
   data() {
     return {
-      checkpoint_list: null
+      checkpoint_list: null,
     };
   },
   created() {
@@ -62,6 +64,12 @@ export default {
         this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
       });
 
+    
+    if(this.$store.state.int == -1){
+      this.$store.state.int = setInterval(()=>{
+        this.startcountdown()
+      },1000);
+    }
     // this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
   },
   mounted() {
@@ -121,9 +129,72 @@ export default {
       } else if (checkpoint.status == 3) {
         this.$router.push({ name: "task_success" });
       } else if (checkpoint.status == 4) {
-        this.$router.push({ name: "task_default" });
+        // this.$router.push({ name: "task_default" });
+        this.$router.push({ name: "task_success" });
       }
+    },
+
+
+    startcountdown(){
+      this.$nextTick(() => {
+        if(this.$store.state.sec > 0){
+          this.countdown()
+        }
+      })
+    },
+    
+    countdown () {
+      let date = new Date()
+      let sec = this.$store.state.sec-parseInt(date.getTime()/1000)
+      var hour = 0
+      var minute = 0
+      var second = 0
+      if (sec >= 60) {
+        minute = Math.floor(sec / 60)
+        second = sec % 60
+        if (minute >= 60) {
+          hour = Math.floor(minute / 60)
+          minute = minute % 60
+        } else {
+              hour = 0
+            }
+      } else {
+        second = sec
+        hour = 0
+        minute = 0
+      }
+
+      hour = hour < 10 && hour > 0 ? '0' + hour : hour
+      minute = minute < 10 && minute > 0 ? '0' + minute : minute
+      second = second < 10 && second > 0 ? '0' + second : second
+      var countdownStr = '距结束 ' + hour + ':' + minute + ':' + --second
+      if (sec <= 0) {
+        this.begin_wait()
+        this.$fetch.api_game_config
+          .set_record({
+            code: this.$store.state.game_config.game_code,
+            id: this.$store.state.user_info.openid,
+            cid: 0,
+            type: 1, // 修改关卡状态
+            status: 3 // 结束游戏
+          })
+          .then(({ data }) => {
+            console.log(data)
+            Indicator.close()
+            clearInterval(this.$store.state.int)
+            this.$store.state.int = -1
+            // 保存游戏记录信息
+            // this.$store.commit("set_record_list", data);
+            // 显示任务
+            // this.$router.push({ name: "task_show" });
+            location.reload()
+          })
+        // location.reload()
+      }
+      try{
+        document.getElementById('product-sec-countdown').innerHTML = countdownStr
+      }catch(e){}
     }
-  }
+  },
 };
 </script>

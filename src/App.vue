@@ -202,6 +202,8 @@ export default {
     },
 
     onMessage(msg) {
+      // console.log("on message");
+      // console.log(msg.data);
       let data = JSON.parse(msg.data);
       switch (data.type) {
         case "ping":
@@ -209,7 +211,7 @@ export default {
           break;
 
         case "multi_shake":
-          console.log("multi shake", data);
+          // console.log("multi shake", data);
           // 多人摇一摇
           this.$store.commit("set_multi_shake");
           var send_data = {
@@ -230,6 +232,24 @@ export default {
           // console.log("on shake complete", send_json);
           this.$store.state.ws.send(send_json);
           break;
+
+        case "countdown":
+          this.$store.state.sec = data.sec
+          console.log("countdown", data.sec);
+          // 倒计时
+          break;
+
+        case "start":
+          try{
+            let startbtn = document.getElementsByClassName("btn-welcome-box")[0]
+            startbtn.style.display='block'
+          }catch(e){
+            console.log(e)
+          }
+          console.log("start");
+          // 倒计时
+          break;
+
 
         default:
           console.log("unknown message", msg);
