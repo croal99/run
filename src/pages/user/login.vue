@@ -26,7 +26,7 @@ export default {
       end_page: false,
       welcome_page: false,
       input_auth: false,
-      auth: '1234',
+      auth: '',
       html: null
     };
   },

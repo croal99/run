@@ -6,6 +6,8 @@
 </template>
 <script type="text/javascript">
 import wx from "weixin-js-sdk";
+import { Indicator } from "mint-ui";
+import { MessageBox } from "mint-ui";
 
 export default {
   name: "app",
@@ -187,7 +189,7 @@ export default {
       };
 
       var send_json = JSON.stringify(send_data);
-      // console.log("on open", send_json);
+      console.log("on open", send_json);
       this.$store.state.ws.send(send_json);
       // this.reportInfo();
     },
@@ -202,8 +204,8 @@ export default {
     },
 
     onMessage(msg) {
-      // console.log("on message");
-      // console.log(msg.data);
+      console.log("on message");
+      console.log(msg.data);
       let data = JSON.parse(msg.data);
       switch (data.type) {
         case "ping":
@@ -244,9 +246,40 @@ export default {
             let startbtn = document.getElementsByClassName("btn-welcome-box")[0]
             startbtn.style.display='block'
           }catch(e){
-            console.log(e)
+            // console.log(e)
           }
           console.log("start");
+          // 倒计时
+          break;
+
+        case "helpplayer":
+          clearTimeout(this.$store.state.timeout);
+          Indicator.close();
+          MessageBox('抱歉', data.ms);
+          
+          if(data.res == 0){console.log(this.$store.state.task.checkpoint)
+            // 修改关卡状态
+            this.$fetch.api_game_config
+              .set_record({
+                code: this.$store.state.game_config.game_code,
+                id: this.$store.state.user_info.openid,
+                cid: this.$store.state.task.checkpoint.id,
+                type: 2, // 修改关卡状态
+                status: 2 // 到达位置
+              })
+              .then(({ data }) => {
+                Indicator.close();
+                // 设置题目
+                let question = this.$store.state.game_config.question_list[
+                  this.$store.state.task.checkpoint.question
+                ];
+                this.$store.commit("set_question", question);
+                // 进入回答问题
+                this.$router.push({ name: "question_show" });
+              });
+          }
+          console.log(data);
+          console.log("helpplayer");
           // 倒计时
           break;
 

@@ -35,6 +35,24 @@
         <span></span>
       </div>
 
+    <el-dialog title="求助" :visible.sync="showFlag">
+      <div style="text-align: center" >
+        <el-form :model="form" :rules="rules" ref="form">
+          <p>请上传疑问位置截图</p>
+          <img class="img-upload" :src="form.url">
+          <el-form-item prop="url">
+            <el-button @click="chooseImage" type="warning" size="small" v-model="form.url">上传图片</el-button>
+          </el-form-item>
+          <el-form-item prop="dec">
+            <el-input type="textarea" :rows="2" placeholder="请描述您所出现的问题" v-model="form.dec"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="onSubmit" type="warning" size="small">提交</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+
       <div class="help-page-content animated fadeInDown delay-time1">
         <div class="distance-box">
           <span class="distance" @click="use_tool('a01')">提示距离/DISTANCE</span>
@@ -51,6 +69,11 @@
           <mt-badge size="small" type="error">{{tools_list['a03'].count}}</mt-badge>
           <span class="arrive-info"></span>
         </div>
+      <el-form :inline="true">
+        <el-form-item>
+          <el-button @click="showFlag = true;" type="warning" size="small">向管理员求助</el-button>
+        </el-form-item>
+      </el-form>
       </div>
 
       <div class="btn-close-box animated fadeIn delay-time3">
@@ -141,7 +164,20 @@ export default {
       },
 
       plugin: ["ToolBar"],
-      amapManager: null
+      amapManager: null,
+      form: {
+        dec: "",
+        url: "",
+      },
+      showFlag: false,
+      rules: {
+        url: [
+          // { required: true, message: '请提交截图以帮助诊断', trigger: 'blur, change' },
+        ],
+        dec: [
+          { required: true, message: '请描述您所遇到的问题', trigger: 'blur, change' },
+        ]
+      },
     };
   },
   mounted() {},
@@ -527,7 +563,88 @@ export default {
         this.shake_fail_message_page = true;
         this.info_page = false;
       }
-    }
+    },
+    // 选择照片
+    chooseImage() {
+      wx.chooseImage({
+        count: 1,
+        sizeType: ["compressed"],
+        sourceType: ["album", "camera"],
+        success: function(res) {
+          var photoID = res.localIds[0];
+          wx.app.uploadImage(photoID);
+        }
+      });
+    },
+
+    // 上传照片到微信
+    uploadImage(photoID) {
+      wx.uploadImage({
+        localId: photoID,
+        isShowProgressTips: 1,
+        success: function(res) {
+          var serverID = res.serverId;
+          wx.app.saveImage(serverID);
+        }
+      });
+    },
+
+    // 从微信服务器下载到SAE
+    saveImage(serverID) {
+      Indicator.open({
+        text: "数据处理中...",
+        spinnerType: "fading-circle"
+      });
+
+      // this.serverID = serverID;
+      this.$fetch.api_game_config
+        .download_media({
+          id: serverID
+        })
+        .then(({ data }) => {
+          Indicator.close();
+          // console.log(data);
+          this.form.url = data.thumb_url;
+        });
+    },
+
+    onSubmit() {
+      // console.log(this.$store.state)
+      // return false
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          // this.showFlag = false
+
+          let send_data = {
+            type: 'helpplayer',
+            user_id: this.$store.state.user_info.openid,
+            game_id: this.$store.state.user_info.game_code,
+            client: 'fengxun',
+            client_type: 'game',
+            target_id: 'ob',
+            message: {
+              type: 'helpplayer',
+              url: this.form.url,
+              dec: this.form.dec,
+            }
+          };
+          console.log(send_data)
+
+          let send_json = JSON.stringify(send_data);
+          this.$store.state.ws.send(send_json)
+          this.showFlag = false
+          this.$store.state.timeout = setTimeout(function(){
+            Indicator.close();
+            MessageBox('抱歉', '没能联系上管理员，请求助现场教练');
+          }, 2*60*1000);
+          Indicator.open({
+            text: "后台处理中,大概两分钟，请稍待...",
+            spinnerType: "fading-circle"
+          });
+          return false
+        }
+      });
+    },
   }
 };
 </script>

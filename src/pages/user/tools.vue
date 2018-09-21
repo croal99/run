@@ -32,7 +32,6 @@
           <span >{{tools_list['a03'].count}}</span>
         </div>
       </div>
-    
       <span class="tool-page-title2"></span>
       <div class="treasure-box">
         <div v-for="treasure in treasure_list" :key="treasure.id" class="treasure-card">
@@ -48,6 +47,8 @@
 
 <script>
 import { Indicator } from "mint-ui";
+import { MessageBox } from "mint-ui";
+import wx from "weixin-js-sdk";
 
 export default {
   data() {
@@ -115,7 +116,7 @@ export default {
       }
 
       return -1;
-    }
+    },
   }
 };
 </script>

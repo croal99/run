@@ -53,7 +53,7 @@ const state = {
   ws: null, // WebSocket
   int: -1, // 游戏倒计时计时器
   sec: -1, // 游戏倒计时
-  endquestion: 0, // 游戏结束的晋级书ID
+  timeout: 0, // 游戏求助遮罩层ID
 };
 
 export default state
