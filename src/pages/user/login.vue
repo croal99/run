@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-html="html" class="welcome"></div>
+    <div v-html="html" class="roof"></div>
     <div v-if="input_auth" class="input-auth">
       <span class="invite-text">请输入邀请码</span>
       <input type="text" v-model="auth">
