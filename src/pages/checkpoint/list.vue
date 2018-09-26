@@ -126,12 +126,13 @@ export default {
         this.$store.commit("set_question", question);
         // 进入回答问题
         this.$router.push({ name: "question_show" });
-      } else if (checkpoint.status == 3) {
-        this.$router.push({ name: "task_success" });
-      } else if (checkpoint.status == 4) {
-        // this.$router.push({ name: "task_default" });
-        this.$router.push({ name: "task_success" });
-      }
+      } 
+      // else if (checkpoint.status == 3) {
+      //   this.$router.push({ name: "task_success" });
+      // } else if (checkpoint.status == 4) {
+      //   // this.$router.push({ name: "task_default" });
+      //   this.$router.push({ name: "task_success" });
+      // }
     },
 
 
