@@ -170,7 +170,11 @@ export default {
         case 9:
           // 任务书
           this.$store.state.task.answer = "OK";
-          this.btn_text = "确定";
+          if(question.answer == ''){
+            this.btn_text = "确定";
+          }else{
+            this.btn_text = question.answer;
+          }
           break;
         default:
           this.btn_text = "提交";
