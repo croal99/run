@@ -22,8 +22,8 @@
     </div>
 
     <div v-if="shake_page" class="shake-page">
-      <!-- <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button>
-      <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button> -->
+      <!-- <mt-button type="primary" @click="shakeComplete()">模拟摇一摇</mt-button> -->
+      <mt-button type="primary" @click="fly2checkpoint()">到达目标点</mt-button>
       <div class="shake-info animated wobble">
         <span>摇一摇手机<br>SHAKE</span>
         <img src="./images/shake.jpg">
@@ -69,6 +69,11 @@
           <mt-badge size="small" type="error">{{tools_list['a03'].count}}</mt-badge>
           <span class="arrive-info"></span>
         </div>
+      <el-form :inline="true">
+        <el-form-item>
+          <el-button @click="showFlag = true;" type="warning" size="small">向管理员求助</el-button>
+        </el-form-item>
+      </el-form>
       </div>
 
       <div class="btn-close-box animated fadeIn delay-time3">

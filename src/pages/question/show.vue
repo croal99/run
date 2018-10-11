@@ -25,7 +25,7 @@
         <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.multi_shake_count"> -->
       </div>
 
-      <div v-if="$store.state.task.answer" class="btn-question-box">
+      <div v-if="$store.state.task.answer.length > 0" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
 
