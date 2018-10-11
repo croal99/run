@@ -16,7 +16,7 @@
       <!-- foot -->
       <div v-if="answer_btn" class="btn-checkpoint-box animated fadeIn delay-time1">
         <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
-        <!-- <span v-if="method==1" class="btn-checkpoint" @click="scanComplete('test')">扫一扫</span> -->
+        <span v-if="method==1" class="btn-checkpoint" @click="scanComplete('test')">扫一扫</span>
         <span v-else class="btn-checkpoint" @click="shakeBegin()">摇一摇</span>
       </div>
     </div>
