@@ -69,11 +69,6 @@
           <mt-badge size="small" type="error">{{tools_list['a03'].count}}</mt-badge>
           <span class="arrive-info"></span>
         </div>
-      <el-form :inline="true">
-        <el-form-item>
-          <el-button @click="showFlag = true;" type="warning" size="small">向管理员求助</el-button>
-        </el-form-item>
-      </el-form>
       </div>
 
       <div class="btn-close-box animated fadeIn delay-time3">
