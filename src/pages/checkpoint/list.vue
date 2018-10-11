@@ -61,7 +61,15 @@ export default {
           return;
         }
         // 保存已经调整后的关卡列表信息，用于显示
-        this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
+        // 用sort进行排序
+        let arr = [];
+        for (var i in this.$store.state.game_config.checkpoint_list) {
+            arr.push(this.$store.state.game_config.checkpoint_list[i]);
+        };
+        arr.sort(function (a,b) {
+          return a['sort'] - b['sort'];
+        });
+        this.checkpoint_list = arr
       });
 
     
