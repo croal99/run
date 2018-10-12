@@ -628,7 +628,7 @@ export default {
               dec: this.form.dec,
             }
           };
-          console.log(send_data)
+          // console.log(send_data)
 
           let send_json = JSON.stringify(send_data);
           this.$store.state.ws.send(send_json)
