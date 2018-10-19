@@ -19,14 +19,14 @@
         <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box animated fadeInUp delay-time4"></mt-checklist>
       </div>
 
-      <div v-if="shake_page">
-        <img :src="shake_qrcode_url" class="answer-shake">
-        <el-progress :text-inside="true" :stroke-width="28" :percentage="$store.state.task.multi_shake_count"></el-progress>
-        <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.multi_shake_count"> -->
+      <div v-if="$store.state.task.answer.toString().length > 0" class="btn-question-box">
+        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
 
-      <div v-if="$store.state.task.answer.length > 0" class="btn-question-box">
-        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
+      <div v-if="shake_page">
+        <img :src="shake_qrcode_url" class="answer-shake">
+        <el-progress :text-inside="true" :stroke-width="28" :percentage="$store.state.task.percentage"></el-progress>
+        <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.percentage"> -->
       </div>
 
       <div v-if="question.type==3" class="btn-question-box">

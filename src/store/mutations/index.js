@@ -377,7 +377,9 @@ export default {
   set_multi_shake(state) {
     state.task.multi_shake_count++;
     let answer = parseInt(state.task.question.answer);
-    state.task.answer = state.task.multi_shake_count > answer ? answer : '';
+    state.task.percentage = (state.task.multi_shake_count/state.task.question.answer)*100;
+    state.task.percentage = state.task.percentage > 100 ? 100 : state.task.percentage;
+    state.task.answer = state.task.multi_shake_count >= answer ? answer : '';
   },
 
   // 设置用户信息和是否登录
