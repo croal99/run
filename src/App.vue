@@ -255,7 +255,7 @@ export default {
         case "helpplayer":
           clearTimeout(this.$store.state.timeout);
           Indicator.close();
-          MessageBox('抱歉', data.ms);
+          MessageBox(data.title, data.ms);
           
           if(data.res == 0){console.log(this.$store.state.task.checkpoint)
             // 修改关卡状态
@@ -282,6 +282,9 @@ export default {
           console.log("helpplayer");
           // 倒计时
           break;
+
+        case "news":
+          MessageBox(data.title, data.ms);
 
 
         default:
