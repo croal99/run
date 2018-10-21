@@ -28,6 +28,7 @@
       <div v-if="$store.state.task.answer" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
+        <!----><span class="btn-question" @click="$store.state.task.answer = question.answer">{{'btn_text'}}</span>
 
       <div v-if="question.type==3" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>

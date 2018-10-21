@@ -205,7 +205,6 @@ export default {
 
     onMessage(msg) {
       console.log("on message");
-      console.log(msg.data);
       let data = JSON.parse(msg.data);
       switch (data.type) {
         case "ping":
