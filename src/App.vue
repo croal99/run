@@ -282,6 +282,9 @@ export default {
           // 倒计时
           break;
 
+        case "news":
+          MessageBox(data.title, data.ms);
+
 
         default:
           console.log("unknown message", msg);
