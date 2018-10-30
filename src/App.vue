@@ -129,7 +129,13 @@ export default {
               "chooseImage",
               "uploadImage",
               "downloadImage",
-              "scanQRCode"
+              "scanQRCode",
+              'startRecord',
+              'stopRecord',
+              'playVoice',
+              'uploadVoice',
+              'downloadVoice',
+              'translateVoice'
             ]
           });
 
@@ -140,7 +146,13 @@ export default {
                 "chooseImage",
                 "uploadImage",
                 "downloadImage",
-                "scanQRCode"
+                "scanQRCode",
+                'startRecord',
+                'stopRecord',
+                'playVoice',
+                'uploadVoice',
+                'downloadVoice',
+                'translateVoice'
               ],
               success: function(res) {
                 // this.$store.state.weixin_status = true;
