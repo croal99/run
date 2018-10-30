@@ -43,9 +43,7 @@
     </div>
 
     <div v-else-if="speech_page" class="info-content-box">
-      <img class="img-upload" :src="$store.state.task.answer">
       <div>{{speech_text}}</div>
-      <div>{{translate}}</div>
       <div class="btn-main-box">
         <button id="talk_btn" @click="speech_recognition"><i :class="{'fa-spin': voice.isspeech}" class="fa fa-play-circle fa-5x fa-fw"></i></button>
       </div>
@@ -218,12 +216,12 @@ export default {
           }
           break;
         case 10:
-          // if (process.env.NODE_ENV == "development") {
-          //   this.$store.state.task.answer = this.question.answer;
-          //   this.set_answer();
-          // } else {
+          if (process.env.NODE_ENV == "development") {
+            this.$store.state.task.answer = this.question.answer;
+            this.set_answer();
+          } else {
             this.show_speech_page(true);
-          // }
+          }
           break;
         default:
           this.set_answer();
@@ -330,7 +328,6 @@ export default {
                   isShowProgressTips: 1, // 默认为1，显示进度提示
                   success: (res) => {// 语音识别的结果
                     this.$store.state.task.answer = res.translateResult;
-                    this.translate = res.translateResult;
                   }
               });
             },
