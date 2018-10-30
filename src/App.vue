@@ -2,6 +2,7 @@
   <div>
     <router-view></router-view>
     <!-- <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div> -->
+    <audio :src="this.$store.state.game_config.audio" controls="controls" preload id="music1" loop autoplay hidden></audio>
   </div>
 </template>
 <script type="text/javascript">
