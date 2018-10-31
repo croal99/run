@@ -77,8 +77,12 @@ export default {
       this.$store.state.int = setInterval(()=>{
         this.startcountdown()
       },1000);
-    }
+    };
     // this.checkpoint_list = this.$store.state.game_config.checkpoint_list;
+
+    
+    //  audio实例
+    this.$store.state.audio = document.getElementById('music1');
   },
   mounted() {
     // console.log("list mounted");

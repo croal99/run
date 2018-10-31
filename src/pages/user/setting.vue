@@ -16,7 +16,7 @@
       
       <div class="gamecontrol">
         <span class="reset" @click="renew">重来</span>
-        <span class="music-setting"></span>
+        <span class="music-setting"><label for="pause_c">背景音乐</label><input id="pause_c" v-model="$store.state.media.bgm" v-on:click="play_audio()" type="checkbox"></span>
       </div>
       
       <div class="about">
@@ -100,6 +100,18 @@ export default {
                 });
             });
         });
+    },
+
+    play_audio(){
+      var audio = this.$store.state.audio;
+      if(audio!==null){             
+          //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+        if(audio.paused){                 
+          audio.play();//audio.play();// 这个就是播放  
+        }else{
+          audio.pause();// 这个就是暂停
+        }
+      }
     }
   }
 };
