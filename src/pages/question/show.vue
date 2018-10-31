@@ -4,7 +4,7 @@
     <div class="main-title-box">
       <span></span>
     </div>
-    <audio :src="this.$store.state.game_config.audio" controls="controls" preload id="music2" loop autoplay hidden></audio>
+    <audio :src="this.question.voice" controls="controls" preload id="music2" autoplay hidden></audio>
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
 
