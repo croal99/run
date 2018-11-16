@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view></router-view>
-    <!-- <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div> -->
+    <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div>
     <audio 
       :src="JSON.stringify(this.$store.state.game_config)!='null'?this.$store.state.game_config.audio:''" 
       :volume="this.$store.state.media.loud" 
@@ -333,6 +333,7 @@ export default {
 
     // 定位失败
     onLocationError(error) {
+      console.log('state',this.$store.state)
       switch (error.code) {
         case error.TIMEOUT:
           console.log("onLocationError:TIMEOUT");
@@ -356,9 +357,46 @@ export default {
       };
       this.$store.commit("set_coords", coords);
     },
+    
+    // 距离计算（lat为纬度, lng为经度）
+    getDistance(lat1, lng1, lat2, lng2) {
+      var dis = 0;
+      var radLat1 = this.toRad(lat1);
+      var radLat2 = this.toRad(lat2);
+      var deltaLat = radLat1 - radLat2;
+      var deltaLng = this.toRad(lng1) - this.toRad(lng2);
+      var dis =
+        2 *
+        Math.asin(
+          Math.sqrt(
+            Math.pow(Math.sin(deltaLat / 2), 2) +
+              Math.cos(radLat1) *
+                Math.cos(radLat2) *
+                Math.pow(Math.sin(deltaLng / 2), 2)
+          )
+        );
+      return (dis * 6378137).toFixed(2);
+    },
 
     //解析定位结果，将定位数据存储到localStorage并上传一份数据到服务器
     onLocationComplete(position) {
+      let checkpoint_list = this.$store.state.game_config.checkpoint_list;
+      let show_range_list = this.$store.state.show_range_list;
+      for(key in show_range_list){
+        // 检查当前距离是否进入目标范围
+        let distance = this.getDistance(
+          position.coords.latitude,
+          position.coords.longitude,
+          show_range_list[key].lat,
+          show_range_list[key].lng
+        );
+        let range = parseFloat(show_range_list[key].range) > 0 ? parseFloat(show_range_list[key].range) : 50;
+        let cid = show_range_list[key]['id'];
+        if (distance > range) {
+          checkpoint_list[cid]['show'] = true;
+          show_range_list.splice(key, 1);
+        }
+      }
       // 保存当前位置到本地存储
       let coords = {
         lng: position.coords.longitude,

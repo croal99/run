@@ -96,9 +96,15 @@ export default {
           else {
             checkpoint.change = false;
           }
-          checkpoint.show = list.show;
+          // 判断是否需要到达距离后再显示
+          if(checkpoint.hasOwnProperty('show_range')&&checkpoint.show_range != 0) {
+            state.show_range_list.push(checkpoint);
+          }else{
+            checkpoint.show = list.show;
+          }
         }
-
+        // console.log('checkpoint', list);
+        // console.log('show_range_list', state.show_range_list);
         // 计算成绩
         for (let key_record in list['record']) {
           let record = list['record'][key_record];
@@ -341,6 +347,7 @@ export default {
   // 设置本地位置坐标
   set_coords(state, coords) {
     var timestamp = Date.parse(new Date());
+    console.log(coords);
     state.position.lng = coords.lng;
     state.position.lat = coords.lat;
     state.position.acc = coords.acc;

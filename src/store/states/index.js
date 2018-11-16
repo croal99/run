@@ -24,6 +24,7 @@ const state = {
     percentage: 0,// 多人摇一摇进度
   },
   change_checkpoint_list: [],  // 变更状态的关卡
+  show_range_list: [],  // 要进入范围内才显示的关卡
   media: { // 多媒体控制
     audio: '',
     bgm: true,
