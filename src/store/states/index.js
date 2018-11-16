@@ -55,6 +55,7 @@ const state = {
   //   },
 
   //   load_status: 0,         // 加载进度
+  WPId: 0,// watchpostion的id
   weixin_status: false, // 微信授权状态
   ws: null, // WebSocket
   int: -1, // 游戏倒计时计时器

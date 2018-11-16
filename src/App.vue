@@ -1,7 +1,8 @@
 <template>
   <div>
     <router-view></router-view>
-    <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div>
+    <div style="position:fixed;top:4px;z-index:1000;color:#000;">{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div>
+    <div style="position:fixed;top:20px;z-index:1000;color:#000;">{{errormsg}}</div>
     <audio 
       :src="JSON.stringify(this.$store.state.game_config)!='null'?this.$store.state.game_config.audio:''" 
       :volume="this.$store.state.media.loud" 
@@ -17,6 +18,11 @@ import { MessageBox } from "mint-ui";
 
 export default {
   name: "app",
+  data() {
+    return {
+      errormsg: "错误信息"
+    }
+  },
   created() {
     console.log("app create");
     // 手机类型判断
@@ -316,12 +322,12 @@ export default {
       if (navigator.geolocation) {
         var geo_options = {
           enableHighAccuracy: true,
-          maximumAge: 30000,
-          timeout: 27000
+          maximumAge: 3000,
+          timeout: 2700
         };
 
         // 启动位置采集
-        navigator.geolocation.watchPosition(
+        this.$store.state.WPId = navigator.geolocation.watchPosition(
           this.onLocationComplete,
           this.onLocationError,
           geo_options
@@ -334,6 +340,7 @@ export default {
     // 定位失败
     onLocationError(error) {
       console.log('state',this.$store.state)
+      this.errormsg = error.message;
       switch (error.code) {
         case error.TIMEOUT:
           console.log("onLocationError:TIMEOUT");
@@ -382,6 +389,7 @@ export default {
     onLocationComplete(position) {
       let checkpoint_list = this.$store.state.game_config.checkpoint_list;
       let show_range_list = this.$store.state.show_range_list;
+      let change = false;
       for(key in show_range_list){
         // 检查当前距离是否进入目标范围
         let distance = this.getDistance(
@@ -394,8 +402,11 @@ export default {
         let cid = show_range_list[key]['id'];
         if (distance > range) {
           checkpoint_list[cid]['show'] = true;
-          show_range_list.splice(key, 1);
+          change = true;
         }
+      }
+      if(change && this.$route.path == "/checkpoint/list"){
+        this.$router.push({ name: "task_list" });
       }
       // 保存当前位置到本地存储
       let coords = {

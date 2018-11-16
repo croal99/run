@@ -98,13 +98,15 @@ export default {
           }
           // 判断是否需要到达距离后再显示
           if(checkpoint.hasOwnProperty('show_range')&&checkpoint.show_range != 0) {
-            state.show_range_list.push(checkpoint);
+            if (typeof state.show_range_list[checkpoint['id']] == "undefined") {
+              state.show_range_list[checkpoint['id']] = checkpoint;
+            }
           }else{
             checkpoint.show = list.show;
           }
         }
         // console.log('checkpoint', list);
-        // console.log('show_range_list', state.show_range_list);
+        console.log('show_range_list', state.show_range_list);
         // 计算成绩
         for (let key_record in list['record']) {
           let record = list['record'][key_record];

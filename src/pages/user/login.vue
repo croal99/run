@@ -195,6 +195,7 @@ export default {
           this.html = this.$store.state.game_config.end.html;
           this.end_page = true;
         } else {
+          // console.log("loginpath", this.$route.path);
           this.$router.push({ name: "task_list" });
         }
       } else {
