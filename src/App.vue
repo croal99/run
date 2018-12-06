@@ -318,7 +318,8 @@ export default {
 
     // GPS定位
     getLocation_h5() {
-      // console.log("getLocation_h5");
+      console.log("getLocation_h5");
+      this.errormsg = "getLocation_h5";      
       if (navigator.geolocation) {
         var geo_options = {
           enableHighAccuracy: true,
@@ -340,7 +341,7 @@ export default {
     // 定位失败
     onLocationError(error) {
       console.log('state',this.$store.state)
-      this.errormsg = error.message;
+      // this.errormsg = error.message;
       switch (error.code) {
         case error.TIMEOUT:
           console.log("onLocationError:TIMEOUT");

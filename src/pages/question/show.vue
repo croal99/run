@@ -17,7 +17,7 @@
       </div>
 
       <div v-if="selete_page">
-        <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box animated fadeInUp delay-time4"></mt-checklist>
+        <mt-checklist v-model="$store.state.task.answer" :options="select_options" :class="$store.state.task.question.css" class="answer-content-box animated fadeInUp delay-time4"></mt-checklist>
       </div>
 
       <div v-if="$store.state.task.answer.toString().length > 0" class="btn-question-box">
