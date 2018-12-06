@@ -20,9 +20,14 @@ const state = {
     question_list: null,
     answer: '',
     success: false,
-    multi_shake_count: 0, // 多人摇一摇进度
+    multi_shake_count: 0, // 多人摇一摇次数
+    percentage: 0,// 多人摇一摇进度
   },
   change_checkpoint_list: [],  // 变更状态的关卡
+  media: { // 多媒体控制
+    audio: '',
+    bgm: true,
+  },
   
   // question: null,           // 当前题目
   // question_list: null,      // 待选题库

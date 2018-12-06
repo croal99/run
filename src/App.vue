@@ -2,6 +2,12 @@
   <div>
     <router-view></router-view>
     <!-- <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div> -->
+    <audio 
+      :src="JSON.stringify(this.$store.state.game_config)!='null'?this.$store.state.game_config.audio:''" 
+      :volume="this.$store.state.media.loud" 
+      :paused="!this.$store.state.media.bgm" 
+      controls="controls" preload id="music1" loop autoplay hidden>
+    </audio>
   </div>
 </template>
 <script type="text/javascript">
@@ -129,7 +135,13 @@ export default {
               "chooseImage",
               "uploadImage",
               "downloadImage",
-              "scanQRCode"
+              "scanQRCode",
+              'startRecord',
+              'stopRecord',
+              'playVoice',
+              'uploadVoice',
+              'downloadVoice',
+              'translateVoice'
             ]
           });
 
@@ -140,7 +152,13 @@ export default {
                 "chooseImage",
                 "uploadImage",
                 "downloadImage",
-                "scanQRCode"
+                "scanQRCode",
+                'startRecord',
+                'stopRecord',
+                'playVoice',
+                'uploadVoice',
+                'downloadVoice',
+                'translateVoice'
               ],
               success: function(res) {
                 // this.$store.state.weixin_status = true;

@@ -54,9 +54,9 @@ export default {
   data() {
     return {
       tools_list: {
-        a01: { id:'a01', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b581586aefbf.jpg"} },
-        a02: { id:'a02', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b581596d7c0e.jpg"} },
-        a03: { id:'a03', count: 0, question: {content : "https://images.51fengxun.cn/media/2018-07-25/5b58159f93a3e.jpg"} },
+        a01: { id:'a01', count: 0, question: {content : "https://images.51fengxun.cn/media/treasurecard.jpg"} },
+        a02: { id:'a02', count: 0, question: {content : "https://images.51fengxun.cn/media/treasurecard.jpg"} },
+        a03: { id:'a03', count: 0, question: {content : "https://images.51fengxun.cn/media/treasurecard.jpg"} },
       },
       treasure_list: { 
       },

@@ -4,6 +4,7 @@
     <div class="main-title-box">
       <span></span>
     </div>
+    <audio :src="this.question.voice" controls="controls" preload id="music2" autoplay hidden></audio>
     <router-link to="/checkpoint/list" class="back-box"></router-link>
     <!-- head end -->
 
@@ -19,18 +20,18 @@
         <mt-checklist v-model="$store.state.task.answer" :options="select_options" class="answer-content-box animated fadeInUp delay-time4"></mt-checklist>
       </div>
 
-      <div v-if="shake_page">
-        <img :src="shake_qrcode_url" class="answer-shake">
-        <el-progress :text-inside="true" :stroke-width="28" :percentage="$store.state.task.multi_shake_count"></el-progress>
-        <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.multi_shake_count"> -->
+      <div v-if="$store.state.task.answer.toString().length > 0" class="btn-question-box">
+        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
 
-      <div v-if="$store.state.task.answer" class="btn-question-box">
-        <span class="btn-question" @click="answer_question">{{btn_text}}</span>
+      <div v-if="shake_page">
+        <img :src="shake_qrcode_url" class="answer-shake">
+        <el-progress :text-inside="true" :stroke-width="28" :percentage="$store.state.task.percentage"></el-progress>
+        <!-- <input class="answer-input animated fadeIn delay-time2" type="text" v-model="$store.state.task.percentage"> -->
       </div>
         <!----><span class="btn-question" @click="$store.state.task.answer = question.answer">{{'btn_text'}}</span>
 
-      <div v-if="question.type==3" class="btn-question-box">
+      <div v-if="question.type==3||question.type==10" class="btn-question-box">
         <span class="btn-question" @click="answer_question">{{btn_text}}</span>
       </div>
     </div>
@@ -41,6 +42,20 @@
         <button class="btn-upload" @click="set_answer">确认上传</button>
         <button class="btn-cancel" @click="close_preview">取消重拍</button>
       </div>
+    </div>
+
+    <div v-else-if="speech_page" class="info-content-box">
+      <img class="img-upload" :src="$store.state.task.answer">
+      <div>{{speech_text}}</div>
+      <!--<div>{{translate}}</div>-->
+      <div class="btn-main-box">
+        <button id="talk_btn" @click="speech_recognition"><i :class="{'fa-spin': voice.isspeech}" class="fa fa-play-circle fa-5x fa-fw"></i></button>
+      </div>
+
+      <div v-if="$store.state.task.answer.toString().length > 0" class="btn-question-box">
+        <span class="btn-question" @click="set_answer">确认答案</span>
+      </div>
+      <button class="btn-cancel" @click="show_speech_page(false)">待会再来</button>
     </div>
 
   </div>
@@ -59,6 +74,9 @@ export default {
       weixin_status: true,
       shake_qrcode_url: "",
       error_count: 0,
+      voice:{isspeech:false,localId:''}, // 语音内容
+      speech_text:"录音状态",
+      translate:"识别结果",
 
       page_index: false, // 分页显示索引
       html: "", // 当前显示页面内容
@@ -70,6 +88,7 @@ export default {
       selete_page: false, // 多选题页面
       shake_page: false, // 多人摇一摇页面
       preview_page: false, // 照片预览页面
+      speech_page:false,// 语音识别页面
 
       btn_text: "确定", // 按钮名称
       answer_btn: false // 提交按钮页面
@@ -112,6 +131,7 @@ export default {
       this.shake_page = false;
       this.preview_page = false;
       this.answer_btn = false;
+      this.speech_page = false;
 
       if (question == null) {
         // 没有题目，返回列表
@@ -177,6 +197,10 @@ export default {
             this.btn_text = question.answer;
           }
           break;
+        case 10:
+          // 语音识别
+          this.btn_text = "语音识别";
+          break;
         default:
           this.btn_text = "提交";
           this.answer = "";
@@ -193,6 +217,14 @@ export default {
             this.set_answer();
           } else {
             this.chooseImage();
+          }
+          break;
+        case 10:
+          if (process.env.NODE_ENV == "development") {
+            this.$store.state.task.answer = this.question.answer;
+            this.set_answer();
+          } else {
+            this.show_speech_page(true);
           }
           break;
         default:
@@ -267,7 +299,50 @@ export default {
     close_preview() {
       this.info_page = true;
       this.preview_page = false;
-    }
+    },
+
+    // 语音识别页面
+    show_speech_page(thepage){
+      this.info_page = !thepage;
+      this.speech_page = thepage;
+    },
+
+    // 语音识别
+    speech_recognition(){
+      this.voice.isspeech = !this.voice.isspeech;
+      if(this.voice.isspeech){
+        wx.startRecord({
+            success: function(){
+              this.speech_text = '正在录音';
+            },
+            cancel: function () {
+              alert('用户拒绝授权录音');
+            }
+        });
+      }else{
+        wx.stopRecord({
+            success: (res) => {
+              this.speech_text = '结束录音';
+              this.voice.localId = res.localId;
+              wx.playVoice({
+                  localId: this.voice.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+              });
+              wx.translateVoice({
+                  localId: this.voice.localId, // 需要识别的音频的本地Id，由录音相关接口获得
+                  isShowProgressTips: 1, // 默认为1，显示进度提示
+                  success: (res) => {// 语音识别的结果
+                    this.$store.state.task.answer = res.translateResult;
+                    this.translate = res.translateResult;
+                  }
+              });
+            },
+            fail: function (res) {
+              alert(JSON.stringify(res));
+            }
+        });
+
+      }
+    },
   }
 };
 </script>
