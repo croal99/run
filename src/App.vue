@@ -185,7 +185,7 @@ export default {
         console.log("init Android WebSocket");
       }
       else {
-        this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn/");
+        this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn:4433/");
         console.log("init IOS WebSocket");
       }
       this.$store.state.ws.onopen = this.onOpened;
