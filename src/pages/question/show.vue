@@ -89,7 +89,7 @@ export default {
       preview_page: false, // 照片预览页面
       speech_page:false,// 语音识别页面
 
-      btn_text: "确定", // 按钮名称
+      btn_text: "确 定", // 按钮名称
       answer_btn: false // 提交按钮页面
     };
   },
@@ -143,7 +143,7 @@ export default {
       this.page_index = 0;
       this.html = question.page_list[this.page_index++];
       this.answer_btn = this.page_index == question.page_list.length;
-      this.btn_text = "确定";
+      this.btn_text = "确 定";
       this.$store.state.task.answer = "";
 
       switch (parseInt(question.type)) {
@@ -191,7 +191,7 @@ export default {
           // 任务书
           this.$store.state.task.answer = "OK";
           if(question.answer == ''){
-            this.btn_text = "确定";
+            this.btn_text = "确 定";
           }else{
             this.btn_text = question.answer;
           }
@@ -201,7 +201,7 @@ export default {
           this.btn_text = "语音识别";
           break;
         default:
-          this.btn_text = "提交";
+          this.btn_text = "提 交";
           this.answer = "";
           this.answer_page = true;
       }
