@@ -15,9 +15,9 @@
 
       <!-- foot -->
       <div v-if="answer_btn" class="btn-checkpoint-box animated fadeIn delay-time1">
-        <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫一扫</span>
-        <!-- <span v-if="method==1" class="btn-checkpoint" @click="scanComplete('test')">扫一扫</span> -->
-        <span v-else class="btn-checkpoint" @click="shakeBegin()">摇一摇</span>
+        <span v-if="method==2" class="btn-checkpoint" @click="scan_task()">扫 一 扫</span>
+        <!-- <span v-if="method==1" class="btn-checkpoint" @click="scanComplete('test')">扫 一 扫</span> -->
+        <span v-else class="btn-checkpoint" @click="shakeBegin()">摇 一 摇</span>
       </div>
     </div>
 
@@ -72,7 +72,7 @@
       </div>
 
       <div class="btn-close-box animated fadeIn delay-time3">
-        <span class="btn-close" @click="close_help()">关闭</span>
+        <span class="btn-close" @click="close_help()">关 闭</span>
       </div>
     </div>
 
@@ -100,7 +100,7 @@
       </el-amap>
 
       <div class="btn-close-box animated fadeIn delay-time3">
-        <span class="btn-close" @click="close_map()">关闭</span>
+        <span class="btn-close" @click="close_map()">关 闭</span>
       </div>
     </div>
 
