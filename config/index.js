@@ -30,7 +30,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'https://game.591cms.com/',
+        target: 'https://game.51fengxun.com/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'
