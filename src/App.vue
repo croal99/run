@@ -181,11 +181,11 @@ export default {
     // 初始化WebSocket
     initWebSocket() {
       if (this.isAndroid) {
-        this.$store.state.ws = new WebSocket("ws://api.51fengxun.cn:7273/");
+        this.$store.state.ws = new WebSocket("ws://api.51fengxun.com:7273/");
         console.log("init Android WebSocket");
       }
       else {
-        this.$store.state.ws = new WebSocket("wss://api.51fengxun.cn:4433/");
+        this.$store.state.ws = new WebSocket("wss://api.51fengxun.com:4433/");
         console.log("init IOS WebSocket");
       }
       this.$store.state.ws.onopen = this.onOpened;
