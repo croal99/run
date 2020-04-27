@@ -1,5 +1,5 @@
 var utils = require('./utils')
-var webpack = require('webpack')
+var {DefinePlugin, HotModuleReplacementPlugin, NoEmitOnErrorsPlugin} = require('webpack')
 var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
@@ -18,12 +18,12 @@ module.exports = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
   plugins: [
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env': config.dev.env
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+    new HotModuleReplacementPlugin(),
+    new NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',

@@ -2,10 +2,10 @@
   <div>
     <router-view></router-view>
     <!-- <div>{{$store.state.position.lng}},{{$store.state.position.lat}},{{$store.state.position.acc}}</div> -->
-    <audio 
-      :src="JSON.stringify(this.$store.state.game_config)!='null'?this.$store.state.game_config.audio:''" 
-      :volume="this.$store.state.media.loud" 
-      :paused="!this.$store.state.media.bgm" 
+    <audio
+      :src="JSON.stringify(this.$store.state.game_config)!='null'?this.$store.state.game_config.audio:''"
+      :volume="this.$store.state.media.loud"
+      :paused="!this.$store.state.media.bgm"
       controls="controls" preload id="music1" loop autoplay hidden>
     </audio>
   </div>
@@ -42,7 +42,7 @@ export default {
     let head = document.getElementsByTagName('HEAD').item(0);
     let style = document.createElement('link');
     let timestamp = Date.parse(new Date());
-    style.href = 'https://images.51fengxun.cn/game/'+game_code+'/css/game.css?dc='+timestamp;
+    style.href = 'https://images.51fengxun.com/game/'+game_code+'/css/game.css?dc='+timestamp;
     style.rel = 'stylesheet';
     style.type = 'text/css';
     head.appendChild(style);
@@ -273,7 +273,7 @@ export default {
           clearTimeout(this.$store.state.timeout);
           Indicator.close();
           MessageBox('抱歉', data.ms);
-          
+
           if(data.res == 0){console.log(this.$store.state.task.checkpoint)
             // 修改关卡状态
             this.$fetch.api_game_config

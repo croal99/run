@@ -27,7 +27,7 @@ module.exports = {
     //是否自动打开浏览器
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/play/',
+    assetsPublicPath: '/',
     proxyTable: {
       '/api': {
         target: 'http://game.591cms.com/',
